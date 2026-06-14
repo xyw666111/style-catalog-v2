@@ -1,0 +1,50 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "catalog"
+    label: "款式图册"
+    files:
+      - name: "products"
+        label: "商品列表"
+        file: "data/products.json"
+        fields:
+          - label: "商品"
+            name: "products"
+            widget: "list"
+            summary: "{{fields.code}} · {{fields.style}} · {{fields.price}}"
+            fields:
+              - {label: "商品编号", name: "code", widget: "string"}
+              - {label: "款式名称", name: "style", widget: "string"}
+              - label: "分区"
+                name: "section"
+                widget: "select"
+                options: ["新品上新", "常规款式", "清仓打折"]
+                default: "常规款式"
+              - label: "价格"
+                name: "price"
+                widget: "select"
+                options: ["¥189", "¥129", "¥99"]
+                default: "¥129"
+              - {label: "分类", name: "category", widget: "string", default: "短袖"}
+              - {label: "颜色", name: "color", widget: "string", required: false}
+              - {label: "尺码", name: "size", widget: "string", default: "S / M / XL / XXL"}
+              - {label: "材质", name: "condition", widget: "string", default: "聚酯纤维速干运动面料"}
+              - {label: "备注", name: "note", widget: "text", required: false}
+              - {label: "封面图", name: "cover", widget: "image", required: false}
+              - label: "展示图片"
+                name: "images"
+                widget: "list"
+                required: false
+                field: {label: "图片", name: "image", widget: "image"}
+              - label: "图片位置"
+                name: "imagePosition"
+                widget: "select"
+                required: false
+                default: "center center"
+                options: ["center center", "center top", "center bottom", "left center", "right center"]
+              - {label: "支付链接（暂不用）", name: "paymentLink", widget: "string", required: false}
