@@ -56,7 +56,7 @@ exports.handler = async (event, context) => {
       const result = await github(`contents/${FILE_PATH}`, {
         method: "PUT",
         body: JSON.stringify({
-          message: "Update products from V5.1 locked admin",
+          message: "Update products from V5.1 locked admin hotfix",
           content: encoded,
           sha: file.sha,
           branch: BRANCH
