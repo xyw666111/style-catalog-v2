@@ -184,6 +184,22 @@
       "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": []
+    },
+    {
+      "id": "PF-STYLE-008",
+      "section": "新品上新",
+      "code": "PF-STYLE-008",
+      "style": "玫红撞色足球风短袖",
+      "price": "¥189",
+      "color": "玫红 / 白",
+      "size": "S / M / XL / XXL",
+      "material": "聚酯纤维速干运动面料",
+      "note": "高饱和玫红色，画面很亮，适合吸引女性朋友浏览。",
+      "images": [
+        "/images/uploads/20260615162355-q7f7h0.png",
+        "/images/uploads/20260615162359-bgz79n.png",
+        "/images/uploads/20260615162404-iwr3cz.png"
+      ]
     }
   ]
 }
