@@ -3,7 +3,6 @@
     {
       "code": "PF-STYLE-001",
       "style": "多色泼墨足球风短袖",
-      "category": "短袖",
       "color": "蓝 / 白 / 黑 / 米色 / 红色点缀",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -14,16 +13,11 @@
         "images/PF-STYLE-001/2.jpg",
         "images/PF-STYLE-001/3.jpg"
       ],
-      "cover": "images/PF-STYLE-001/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-001/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-002",
       "style": "绿色泼墨足球风短袖",
-      "category": "短袖",
       "color": "墨绿 / 黑 / 白 / 红蓝肩线",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -35,16 +29,11 @@
         "images/PF-STYLE-002/3.jpg",
         "images/PF-STYLE-002/4.jpg"
       ],
-      "cover": "images/PF-STYLE-002/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-002/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-003",
       "style": "深蓝撞色训练风短袖",
-      "category": "短袖",
       "color": "深蓝 / 亮蓝",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -55,16 +44,11 @@
         "images/PF-STYLE-003/2.jpg",
         "images/PF-STYLE-003/3.jpg"
       ],
-      "cover": "images/PF-STYLE-003/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-003/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-004",
       "style": "浅粉休闲足球风短袖",
-      "category": "短袖",
       "color": "浅粉 / 珊瑚粉",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -75,16 +59,11 @@
         "images/PF-STYLE-004/2.jpg",
         "images/PF-STYLE-004/3.jpg"
       ],
-      "cover": "images/PF-STYLE-004/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-004/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-005",
       "style": "湖水蓝翻领足球风短袖",
-      "category": "短袖",
       "color": "湖水蓝 / 酒红 / 深蓝",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -95,16 +74,11 @@
         "images/PF-STYLE-005/2.jpg",
         "images/PF-STYLE-005/3.jpg"
       ],
-      "cover": "images/PF-STYLE-005/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-005/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-006",
       "style": "蓝红渐变足球风短袖",
-      "category": "短袖",
       "color": "蓝 / 红 / 黄色点缀",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -115,16 +89,11 @@
         "images/PF-STYLE-006/2.jpg",
         "images/PF-STYLE-006/3.jpg"
       ],
-      "cover": "images/PF-STYLE-006/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-006/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-007",
       "style": "黑黄撞色足球风短袖",
-      "category": "短袖",
       "color": "黑 / 黄色线条",
       "size": "S / M / XL / XXL",
       "price": "¥129",
@@ -135,16 +104,11 @@
         "images/PF-STYLE-007/2.jpg",
         "images/PF-STYLE-007/3.jpg"
       ],
-      "cover": "images/PF-STYLE-007/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-007/",
-      "imagePosition": "center center",
       "section": "常规款式"
     },
     {
       "code": "PF-STYLE-008",
       "style": "玫红撞色足球风短袖",
-      "category": "短袖",
       "color": "玫红 / 白",
       "size": "S / M / XL / XXL",
       "price": "¥189",
@@ -155,16 +119,11 @@
         "images/PF-STYLE-008/2.jpg",
         "images/PF-STYLE-008/3.jpg"
       ],
-      "cover": "images/PF-STYLE-008/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-008/",
-      "imagePosition": "center center",
       "section": "新品上新"
     },
     {
       "code": "PF-STYLE-009",
       "style": "白橙简约足球风短袖",
-      "category": "短袖",
       "color": "白 / 黑 / 橙色细节",
       "size": "S / M / XL / XXL",
       "price": "¥189",
@@ -175,16 +134,11 @@
         "images/PF-STYLE-009/2.jpg",
         "images/PF-STYLE-009/3.jpg"
       ],
-      "cover": "images/PF-STYLE-009/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-009/",
-      "imagePosition": "center center",
       "section": "新品上新"
     },
     {
       "code": "PF-STYLE-010",
       "style": "黑蓝撞色足球风短袖",
-      "category": "短袖",
       "color": "黑 / 亮蓝",
       "size": "S / M / XL / XXL",
       "price": "¥189",
@@ -195,16 +149,11 @@
         "images/PF-STYLE-010/2.jpg",
         "images/PF-STYLE-010/3.jpg"
       ],
-      "cover": "images/PF-STYLE-010/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-010/",
-      "imagePosition": "center center",
       "section": "新品上新"
     },
     {
       "code": "PF-STYLE-011",
       "style": "紫色复古足球风短袖",
-      "category": "短袖",
       "color": "紫 / 白 / 浅紫",
       "size": "S / M / XL / XXL",
       "price": "¥189",
@@ -215,16 +164,11 @@
         "images/PF-STYLE-011/2.jpg",
         "images/PF-STYLE-011/3.jpg"
       ],
-      "cover": "images/PF-STYLE-011/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-011/",
-      "imagePosition": "center center",
       "section": "新品上新"
     },
     {
       "code": "PF-STYLE-012",
       "style": "深蓝横纹足球风短袖",
-      "category": "短袖",
       "color": "深蓝 / 红色细节",
       "size": "S / M / XL / XXL",
       "price": "¥189",
@@ -235,101 +179,73 @@
         "images/PF-STYLE-012/2.jpg",
         "images/PF-STYLE-012/3.jpg"
       ],
-      "cover": "images/PF-STYLE-012/cover.jpg",
-      "paymentLink": "",
-      "imageFolder": "images/PF-STYLE-012/",
-      "imagePosition": "center center",
       "section": "新品上新"
     },
     {
       "code": "PF-STYLE-013",
       "style": "清仓运动风短袖 01",
-      "category": "短袖",
       "color": "待补充",
       "size": "S / M / XL / XXL",
       "price": "¥99",
       "condition": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": [],
-      "cover": "",
-      "imagePosition": "center center",
-      "section": "清仓打折",
-      "imageFolder": "images/PF-STYLE-013/"
+      "section": "清仓打折"
     },
     {
       "code": "PF-STYLE-014",
       "style": "清仓运动风短袖 02",
-      "category": "短袖",
       "color": "待补充",
       "size": "S / M / XL / XXL",
       "price": "¥99",
       "condition": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": [],
-      "cover": "",
-      "imagePosition": "center center",
-      "section": "清仓打折",
-      "imageFolder": "images/PF-STYLE-014/"
+      "section": "清仓打折"
     },
     {
       "code": "PF-STYLE-015",
       "style": "清仓运动风短袖 03",
-      "category": "短袖",
       "color": "待补充",
       "size": "S / M / XL / XXL",
       "price": "¥99",
       "condition": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": [],
-      "cover": "",
-      "imagePosition": "center center",
-      "section": "清仓打折",
-      "imageFolder": "images/PF-STYLE-015/"
+      "section": "清仓打折"
     },
     {
       "code": "PF-STYLE-016",
       "style": "清仓运动风短袖 04",
-      "category": "短袖",
       "color": "待补充",
       "size": "S / M / XL / XXL",
       "price": "¥99",
       "condition": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": [],
-      "cover": "",
-      "imagePosition": "center center",
-      "section": "清仓打折",
-      "imageFolder": "images/PF-STYLE-016/"
+      "section": "清仓打折"
     },
     {
       "code": "PF-STYLE-017",
       "style": "清仓运动风短袖 05",
-      "category": "短袖",
       "color": "待补充",
       "size": "S / M / XL / XXL",
       "price": "¥99",
       "condition": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": [],
-      "cover": "",
-      "imagePosition": "center center",
-      "section": "清仓打折",
-      "imageFolder": "images/PF-STYLE-017/"
+      "section": "清仓打折"
     },
     {
       "code": "PF-STYLE-018",
       "style": "清仓运动风短袖 06",
-      "category": "短袖",
       "color": "待补充",
       "size": "S / M / XL / XXL",
       "price": "¥99",
       "condition": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
       "images": [],
-      "cover": "",
-      "imagePosition": "center center",
-      "section": "清仓打折",
-      "imageFolder": "images/PF-STYLE-018/"
+      "section": "清仓打折"
     }
   ]
 }

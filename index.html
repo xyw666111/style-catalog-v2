@@ -175,14 +175,16 @@
     function openSection(section){currentSection=section;$('searchInput').value='';currentFilter='全部';renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.openSection=openSection;
     let currentImages=[];let currentImageIndex=0;
     function setMainImage(src){
-      const imgHtml=src?`<img src="${src}" alt="商品图片">`:'<div class="placeholder">待上传真实图片</div>';
-      const arrows=currentImages.length>1?`<button class="gallery-arrow prev" id="prevImgBtn" aria-label="上一张">‹</button><button class="gallery-arrow next" id="nextImgBtn" aria-label="下一张">›</button>`:'';
-      $('mainImgWrap').innerHTML=imgHtml+arrows;
-      const mainImg=$('mainImgWrap').querySelector('img');
-      if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();openLightbox();};
-      const prev=$('prevImgBtn'),next=$('nextImgBtn');
-      if(prev)prev.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex-1);};
-      if(next)next.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex+1);};
+      if(!src){
+        $('mainImgWrap').innerHTML='<div class="placeholder">暂无图片</div>';
+        return;
+      }
+      const arrows=currentImages.length>1?'<button class="gallery-arrow prev" id="prevImgBtn" aria-label="上一张">‹</button><button class="gallery-arrow next" id="nextImgBtn" aria-label="下一张">›</button>':'';
+      $('mainImgWrap').innerHTML=`<img src="${src}" alt="商品图片">${arrows}`;
+      $('mainImgWrap').querySelector('img').onclick=(e)=>{e.stopPropagation();openLightbox();};
+      const prev=$('prevImgBtn'), next=$('nextImgBtn');
+      if(prev) prev.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex-1);};
+      if(next) next.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex+1);};
     }
     function updateThumbs(){document.querySelectorAll('.thumb').forEach((b,i)=>b.classList.toggle('active',i===currentImageIndex));}
     function switchImage(i){
@@ -196,7 +198,7 @@
       $('modalCode').textContent=p.code;$('modalTitle').textContent=p.style;$('modalPrice').innerHTML=`${p.price} <small>价格</small>`;$('modalDesc').textContent=p.note||'暂无备注';
       const rows=[['价格',p.price],['尺码',p.size],['颜色',p.color],['分区',p.section||'常规款式'],['分类',p.category],['材质',p.condition]];
       $('details').innerHTML=rows.map(r=>`<div class="detail-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
-      currentImages=p.images&&p.images.length?p.images:[p.cover];currentImageIndex=0;
+      currentImages=p.images&&p.images.length?p.images:[];currentImageIndex=0;
       setMainImage(currentImages[0]);
       $('thumbs').innerHTML=currentImages.map((src,i)=>`<button class="thumb ${i===0?'active':''}" data-i="${i}"><img src="${src}" alt="图片${i+1}"></button>`).join('');
       document.querySelectorAll('.thumb').forEach(btn=>btn.onclick=()=>switchImage(Number(btn.dataset.i)));
@@ -204,7 +206,7 @@
     } window.openModal=openModal;
     function closeModal(){$('modal').classList.remove('open');closeLightbox(false);document.body.style.overflow='';}
     $('closeBtn').onclick=closeModal;$('continueBtn').onclick=closeModal;$('modalBackBtn').onclick=closeModal;$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
-    function openLightbox(){if(!currentImages.length)return;$('lightboxImg').src=currentImages[currentImageIndex];$('lightbox').classList.add('open');}
+    function openLightbox(){if(!currentImages.length||!currentImages[currentImageIndex])return;$('lightboxImg').src=currentImages[currentImageIndex];$('lightbox').classList.add('open');}
     function closeLightbox(clear=true){$('lightbox').classList.remove('open');if(clear)$('lightboxImg').removeAttribute('src');}
     function moveLightbox(delta){switchImage(currentImageIndex+delta);$('lightboxImg').src=currentImages[currentImageIndex];}
     $('lightboxClose').onclick=()=>closeLightbox();$('lightboxPrev').onclick=(e)=>{e.stopPropagation();moveLightbox(-1);};$('lightboxNext').onclick=(e)=>{e.stopPropagation();moveLightbox(1);};$('lightbox').addEventListener('click',e=>{if(e.target.id==='lightbox')closeLightbox();});
