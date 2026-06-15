@@ -1,251 +1,253 @@
 {
   "products": [
     {
+      "id": "PF-STYLE-001",
+      "section": "常规款式",
       "code": "PF-STYLE-001",
       "style": "多色泼墨足球风短袖",
+      "price": "¥129",
       "color": "蓝 / 白 / 黑 / 米色 / 红色点缀",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "多色泼墨图案，适合做图册视觉重点款。",
       "images": [
         "images/PF-STYLE-001/cover.jpg",
         "images/PF-STYLE-001/2.jpg",
         "images/PF-STYLE-001/3.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
+      "id": "PF-STYLE-002",
+      "section": "常规款式",
       "code": "PF-STYLE-002",
       "style": "绿色泼墨足球风短袖",
+      "price": "¥129",
       "color": "墨绿 / 黑 / 白 / 红蓝肩线",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "绿色泼墨图案，整体偏街头和复古运动风。",
       "images": [
         "images/PF-STYLE-002/cover.jpg",
         "images/PF-STYLE-002/2.jpg",
         "images/PF-STYLE-002/3.jpg",
         "images/PF-STYLE-002/4.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
+      "id": "PF-STYLE-003",
+      "section": "常规款式",
       "code": "PF-STYLE-003",
       "style": "深蓝撞色训练风短袖",
+      "price": "¥129",
       "color": "深蓝 / 亮蓝",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "深蓝主色，袖部亮蓝撞色，干净耐看。",
       "images": [
         "images/PF-STYLE-003/cover.jpg",
         "images/PF-STYLE-003/2.jpg",
         "images/PF-STYLE-003/3.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
+      "id": "PF-STYLE-004",
+      "section": "常规款式",
       "code": "PF-STYLE-004",
       "style": "浅粉休闲足球风短袖",
+      "price": "¥129",
       "color": "浅粉 / 珊瑚粉",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "浅粉色系，风格更柔和，适合女性朋友浏览和穿搭参考。",
       "images": [
         "images/PF-STYLE-004/cover.jpg",
         "images/PF-STYLE-004/2.jpg",
         "images/PF-STYLE-004/3.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
+      "id": "PF-STYLE-005",
+      "section": "常规款式",
       "code": "PF-STYLE-005",
       "style": "湖水蓝翻领足球风短袖",
+      "price": "¥129",
       "color": "湖水蓝 / 酒红 / 深蓝",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "湖水蓝主色，翻领设计，清爽明亮。",
       "images": [
         "images/PF-STYLE-005/cover.jpg",
         "images/PF-STYLE-005/2.jpg",
         "images/PF-STYLE-005/3.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
+      "id": "PF-STYLE-006",
+      "section": "常规款式",
       "code": "PF-STYLE-006",
       "style": "蓝红渐变足球风短袖",
+      "price": "¥129",
       "color": "蓝 / 红 / 黄色点缀",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "蓝红渐变视觉强，适合作为图册里的亮色款。",
       "images": [
         "images/PF-STYLE-006/cover.jpg",
         "images/PF-STYLE-006/2.jpg",
         "images/PF-STYLE-006/3.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
+      "id": "PF-STYLE-007",
+      "section": "常规款式",
       "code": "PF-STYLE-007",
       "style": "黑黄撞色足球风短袖",
+      "price": "¥129",
       "color": "黑 / 黄色线条",
       "size": "S / M / XL / XXL",
-      "price": "¥129",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "黑色主调加黄色边线，视觉更利落。",
       "images": [
         "images/PF-STYLE-007/cover.jpg",
         "images/PF-STYLE-007/2.jpg",
         "images/PF-STYLE-007/3.jpg"
-      ],
-      "section": "常规款式"
+      ]
     },
     {
-      "code": "PF-STYLE-008",
-      "style": "玫红撞色足球风短袖",
-      "color": "玫红 / 白",
-      "size": "S / M / XL / XXL",
-      "price": "¥189",
-      "condition": "聚酯纤维速干运动面料",
-      "note": "高饱和玫红色，画面很亮，适合吸引女性朋友浏览。",
-      "images": [
-        "images/PF-STYLE-008/cover.jpg",
-        "images/PF-STYLE-008/2.jpg",
-        "images/PF-STYLE-008/3.jpg"
-      ],
-      "section": "新品上新"
-    },
-    {
-      "code": "PF-STYLE-009",
-      "style": "白橙简约足球风短袖",
-      "color": "白 / 黑 / 橙色细节",
-      "size": "S / M / XL / XXL",
-      "price": "¥189",
-      "condition": "聚酯纤维速干运动面料",
-      "note": "白色基础款，干净清爽，适合放在图册中调节整体视觉。",
-      "images": [
-        "images/PF-STYLE-009/cover.jpg",
-        "images/PF-STYLE-009/2.jpg",
-        "images/PF-STYLE-009/3.jpg"
-      ],
-      "section": "新品上新"
-    },
-    {
-      "code": "PF-STYLE-010",
-      "style": "黑蓝撞色足球风短袖",
-      "color": "黑 / 亮蓝",
-      "size": "S / M / XL / XXL",
-      "price": "¥189",
-      "condition": "聚酯纤维速干运动面料",
-      "note": "黑色主色搭配亮蓝线条，简洁有运动感。",
-      "images": [
-        "images/PF-STYLE-010/cover.jpg",
-        "images/PF-STYLE-010/2.jpg",
-        "images/PF-STYLE-010/3.jpg"
-      ],
-      "section": "新品上新"
-    },
-    {
-      "code": "PF-STYLE-011",
-      "style": "紫色复古足球风短袖",
-      "color": "紫 / 白 / 浅紫",
-      "size": "S / M / XL / XXL",
-      "price": "¥189",
-      "condition": "聚酯纤维速干运动面料",
-      "note": "紫色复古风格，带一点户外度假感，适合作为特色款。",
-      "images": [
-        "images/PF-STYLE-011/cover.jpg",
-        "images/PF-STYLE-011/2.jpg",
-        "images/PF-STYLE-011/3.jpg"
-      ],
-      "section": "新品上新"
-    },
-    {
-      "code": "PF-STYLE-012",
-      "style": "深蓝横纹足球风短袖",
-      "color": "深蓝 / 红色细节",
-      "size": "S / M / XL / XXL",
-      "price": "¥189",
-      "condition": "聚酯纤维速干运动面料",
-      "note": "深蓝横纹设计，低调耐看，适合日常运动风穿搭。",
-      "images": [
-        "images/PF-STYLE-012/cover.jpg",
-        "images/PF-STYLE-012/2.jpg",
-        "images/PF-STYLE-012/3.jpg"
-      ],
-      "section": "新品上新"
-    },
-    {
+      "id": "PF-STYLE-013",
+      "section": "清仓打折",
       "code": "PF-STYLE-013",
       "style": "清仓运动风短袖 01",
+      "price": "¥99",
       "color": "待补充",
       "size": "S / M / XL / XXL",
-      "price": "¥99",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
-      "images": [],
-      "section": "清仓打折"
+      "images": []
     },
     {
+      "id": "PF-STYLE-014",
+      "section": "清仓打折",
       "code": "PF-STYLE-014",
       "style": "清仓运动风短袖 02",
+      "price": "¥99",
       "color": "待补充",
       "size": "S / M / XL / XXL",
-      "price": "¥99",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
-      "images": [],
-      "section": "清仓打折"
+      "images": []
     },
     {
+      "id": "PF-STYLE-015",
+      "section": "清仓打折",
       "code": "PF-STYLE-015",
       "style": "清仓运动风短袖 03",
+      "price": "¥99",
       "color": "待补充",
       "size": "S / M / XL / XXL",
-      "price": "¥99",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
-      "images": [],
-      "section": "清仓打折"
+      "images": []
     },
     {
+      "id": "PF-STYLE-016",
+      "section": "清仓打折",
       "code": "PF-STYLE-016",
       "style": "清仓运动风短袖 04",
+      "price": "¥99",
       "color": "待补充",
       "size": "S / M / XL / XXL",
-      "price": "¥99",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
-      "images": [],
-      "section": "清仓打折"
+      "images": []
     },
     {
+      "id": "PF-STYLE-017",
+      "section": "清仓打折",
       "code": "PF-STYLE-017",
       "style": "清仓运动风短袖 05",
+      "price": "¥99",
       "color": "待补充",
       "size": "S / M / XL / XXL",
-      "price": "¥99",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
-      "images": [],
-      "section": "清仓打折"
+      "images": []
     },
     {
+      "id": "PF-STYLE-018",
+      "section": "清仓打折",
       "code": "PF-STYLE-018",
       "style": "清仓运动风短袖 06",
+      "price": "¥99",
       "color": "待补充",
       "size": "S / M / XL / XXL",
-      "price": "¥99",
-      "condition": "聚酯纤维速干运动面料",
+      "material": "聚酯纤维速干运动面料",
       "note": "清仓打折款，图片待补充。",
-      "images": [],
-      "section": "清仓打折"
+      "images": []
+    },
+    {
+      "id": "PF-STYLE-008",
+      "section": "新品上新",
+      "code": "PF-STYLE-008",
+      "style": "玫红撞色足球风短袖",
+      "price": "¥189",
+      "color": "玫红 / 白",
+      "size": "S / M / XL / XXL",
+      "material": "聚酯纤维速干运动面料",
+      "note": "高饱和玫红色，画面很亮，适合吸引女性朋友浏览。",
+      "images": [
+        "/images/uploads/20260615162355-q7f7h0.png",
+        "/images/uploads/20260615162359-bgz79n.png",
+        "/images/uploads/20260615162404-iwr3cz.png"
+      ]
+    },
+    {
+      "id": "p1781540691638",
+      "section": "新品上新",
+      "code": "PF-NEW-015",
+      "style": "未命名款式",
+      "price": "¥189",
+      "color": "待补充",
+      "size": "S / M / XL / XXL",
+      "material": "聚酯纤维速干运动面料",
+      "note": "",
+      "images": [
+        "/images/uploads/20260615162435-gyrkid.png",
+        "/images/uploads/20260615162439-z6xy4o.png",
+        "/images/uploads/20260615162444-x6dvck.png",
+        "/images/uploads/20260615162448-7kzbnh.png"
+      ]
+    },
+    {
+      "id": "p1781540787547",
+      "section": "新品上新",
+      "code": "PF-NEW-016",
+      "style": "未命名款式",
+      "price": "¥189",
+      "color": "待补充",
+      "size": "S / M / XL / XXL",
+      "material": "聚酯纤维速干运动面料",
+      "note": "",
+      "images": [
+        "/images/uploads/20260615162615-s5x0os.png",
+        "/images/uploads/20260615162620-ihofxv.png",
+        "/images/uploads/20260615162623-a7sblu.png"
+      ]
+    },
+    {
+      "id": "p1781540816524",
+      "section": "新品上新",
+      "code": "PF-NEW-017",
+      "style": "未命名款式",
+      "price": "¥189",
+      "color": "待补充",
+      "size": "S / M / XL / XXL",
+      "material": "聚酯纤维速干运动面料",
+      "note": "",
+      "images": [
+        "/images/uploads/20260615162648-5ilh58.png",
+        "/images/uploads/20260615162653-myz7y8.png"
+      ]
     }
   ]
 }
