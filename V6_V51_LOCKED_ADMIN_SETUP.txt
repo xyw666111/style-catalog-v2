@@ -1,0 +1,54 @@
+V6 V5.1 Locked Admin 配置步骤
+
+第一步：上传新版文件
+
+1. 解压 `jersey_site_v6_v51_locked_admin.zip`
+2. 打开里面的 `jersey_site_v6_v51_locked_admin` 文件夹
+3. 把里面所有文件复制到本地仓库 `style-catalog-v2`
+4. 覆盖旧文件
+5. GitHub Desktop 提交：
+   v6 v51 locked admin
+6. Push origin
+
+第二步：创建 GitHub Token
+
+1. GitHub → Settings
+2. Developer settings
+3. Personal access tokens
+4. Fine-grained tokens
+5. Generate new token
+6. Repository access 只选择：
+   xyw666111/style-catalog-v2
+7. Repository permissions 里把 Contents 设置为 Read and write
+8. 创建后复制 token
+
+第三步：Netlify 添加环境变量
+
+Netlify → style-catalog-v2 → Site configuration → Environment variables
+
+添加：
+
+GITHUB_TOKEN = 复制的 token
+
+建议再添加：
+
+GITHUB_REPO = xyw666111/style-catalog-v2
+GITHUB_BRANCH = main
+
+第四步：重新部署
+
+Netlify → Deploys → Trigger deploy → Deploy site
+
+第五步：测试
+
+打开：
+
+https://style-catalog-v2.netlify.app/admin/
+
+测试一个商品：
+1. 编辑商品
+2. 上传 2-3 张图
+3. 拖动图片顺序
+4. 保存商品
+5. 等 1-3 分钟
+6. 打开前台检查
