@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>手机端商品读取检查</title>
+  <style>
+    body{margin:0;padding:18px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;background:#fbfaf7;color:#171717}
+    h1{font-size:22px;margin:0 0 10px}.muted{color:#777;font-size:13px;line-height:1.7}.box{background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:14px;margin:14px 0;word-break:break-word}.ok{color:#0a7a32}.bad{color:#9a312d}.item{border-top:1px solid #eee;padding-top:12px;margin-top:12px}.label{color:#777;font-size:12px}.value{font-size:15px;margin:4px 0 10px}.btn{display:block;text-align:center;border:1px solid #171717;border-radius:999px;padding:12px 14px;margin-top:14px;color:#171717;text-decoration:none;background:#fff;font-weight:700}
+  </style>
+</head>
+<body>
+  <h1>手机端商品读取检查</h1>
+  <p class="muted">这个页面只检查手机能不能读取商品文字数据，暂时不加载商品图片。</p>
+  <div class="box" id="status">正在读取 /api/products，请稍等...</div>
+  <div id="list"></div>
+  <a class="btn" href="/index.html?v=from-mobile-check">返回正式前台</a>
+<script>
+(async function(){
+  const status=document.getElementById('status');
+  const list=document.getElementById('list');
+  try{
+    const start=Date.now();
+    const res=await fetch('/api/products?mobile_check=' + Date.now(),{cache:'no-store'});
+    const text=await res.text();
+    const kb=Math.round(text.length/1024);
+    let data;
+    try{ data=JSON.parse(text); }catch(e){ throw new Error('接口返回内容不是标准 JSON，长度约 '+kb+'KB'); }
+    const products=Array.isArray(data.products)?data.products:[];
+    status.innerHTML='<b class="ok">读取成功</b><br>商品数量：'+products.length+'<br>接口大小：约 '+kb+' KB<br>耗时：'+(Date.now()-start)+' ms';
+    if(!products.length){ list.innerHTML='<div class="box bad">接口里没有商品。</div>'; return; }
+    list.innerHTML=products.slice(0,8).map(function(p,i){
+      const imgs=Array.isArray(p.images)?p.images:[];
+      const imgSize=imgs.reduce(function(n,s){return n+(typeof s==='string'?s.length:0)},0);
+      return '<div class="box item">'+
+        '<div class="label">第 '+(i+1)+' 个商品</div>'+
+        '<div class="value"><b>'+escapeHtml(p.style||'未命名款式')+'</b></div>'+
+        '<div class="label">编号</div><div class="value">'+escapeHtml(p.code||'')+'</div>'+
+        '<div class="label">分区</div><div class="value">'+escapeHtml(p.section||'')+'</div>'+
+        '<div class="label">价格</div><div class="value">'+escapeHtml(p.price||'')+'</div>'+
+        '<div class="label">图片数量 / 图片数据大小</div><div class="value">'+imgs.length+' 张 / 约 '+Math.round(imgSize/1024)+' KB</div>'+
+      '</div>';
+    }).join('');
+  }catch(err){
+    status.innerHTML='<b class="bad">读取失败</b><br>'+escapeHtml(err.message||String(err));
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+})();
+</script>
+</body>
+</html>
