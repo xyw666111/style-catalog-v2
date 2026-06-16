@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>款式预览小册</title>
+  <title>款式预览小册 · Cloudflare版</title>
   <style>
     :root{--bg:#fbfaf7;--card:#fff;--ink:#171717;--muted:#74706a;--line:#e6e1d8;--soft:#f4f1eb;--soft2:#faf7f1;--radius:22px;--shadow:0 18px 50px rgba(20,20,20,.07)}
     *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:var(--bg);color:var(--ink);letter-spacing:.01em} button{font-family:inherit;cursor:pointer;color:inherit}
@@ -142,17 +142,18 @@
       const cover=normalizeImageValue(p.cover)||imgs[0]||'';
       return {...p, cover, images:imgs.length?imgs:(cover?[cover]:[]), category:p.category||'短袖', section:p.section||'常规款式', price:p.price||'¥129', size:p.size||'S / M / XL / XXL', condition:p.condition||'聚酯纤维速干运动面料', imagePosition:p.imagePosition||'center center'};
     }
+    const API_BASE='https://style-catalog-api.893380992.workers.dev';
     async function loadProducts(){
       try{
-        const res=await fetch('data/products.json',{cache:'no-store'});
+        const res=await fetch(API_BASE + '/api/products',{cache:'no-store'});
         if(!res.ok)throw new Error('商品数据加载失败');
         const data=await res.json();
         products=(data.products||data||[]).map(normalizeProduct);
-        categories=['全部',...Array.from(new Set(products.map(p=>p.category).filter(Boolean)))];
+        categories=['全部'];
         renderFilters();
         renderGrid();
       }catch(err){
-        $('grid').innerHTML='<div class="notice">商品数据加载失败。请确认已上传到 Netlify，或使用本地服务器预览。</div>';
+        $('grid').innerHTML='<div class="notice">商品数据加载失败。请确认 Cloudflare Worker API 正常。</div>';
       }
     }
     function renderFilters(){const box=$('filters'); if(categories.length<=2){box.style.display='none'; currentFilter='全部'; return;} box.style.display='flex'; box.innerHTML=categories.map(c=>`<button class="filter-btn ${c===currentFilter?'active':''}" data-filter="${c}">${c}</button>`).join('');document.querySelectorAll('.filter-btn').forEach(btn=>btn.onclick=()=>{currentFilter=btn.dataset.filter;currentSection=null;renderFilters();renderGrid();});}
@@ -175,16 +176,14 @@
     function openSection(section){currentSection=section;$('searchInput').value='';currentFilter='全部';renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.openSection=openSection;
     let currentImages=[];let currentImageIndex=0;
     function setMainImage(src){
-      if(!src){
-        $('mainImgWrap').innerHTML='<div class="placeholder">暂无图片</div>';
-        return;
-      }
-      const arrows=currentImages.length>1?'<button class="gallery-arrow prev" id="prevImgBtn" aria-label="上一张">‹</button><button class="gallery-arrow next" id="nextImgBtn" aria-label="下一张">›</button>':'';
-      $('mainImgWrap').innerHTML=`<img src="${src}" alt="商品图片">${arrows}`;
-      $('mainImgWrap').querySelector('img').onclick=(e)=>{e.stopPropagation();openLightbox();};
-      const prev=$('prevImgBtn'), next=$('nextImgBtn');
-      if(prev) prev.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex-1);};
-      if(next) next.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex+1);};
+      const imgHtml=src?`<img src="${src}" alt="商品图片">`:'<div class="placeholder">待上传真实图片</div>';
+      const arrows=currentImages.length>1?`<button class="gallery-arrow prev" id="prevImgBtn" aria-label="上一张">‹</button><button class="gallery-arrow next" id="nextImgBtn" aria-label="下一张">›</button>`:'';
+      $('mainImgWrap').innerHTML=imgHtml+arrows;
+      const mainImg=$('mainImgWrap').querySelector('img');
+      if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();openLightbox();};
+      const prev=$('prevImgBtn'),next=$('nextImgBtn');
+      if(prev)prev.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex-1);};
+      if(next)next.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex+1);};
     }
     function updateThumbs(){document.querySelectorAll('.thumb').forEach((b,i)=>b.classList.toggle('active',i===currentImageIndex));}
     function switchImage(i){
@@ -198,7 +197,7 @@
       $('modalCode').textContent=p.code;$('modalTitle').textContent=p.style;$('modalPrice').innerHTML=`${p.price} <small>价格</small>`;$('modalDesc').textContent=p.note||'暂无备注';
       const rows=[['价格',p.price],['尺码',p.size],['颜色',p.color],['分区',p.section||'常规款式'],['分类',p.category],['材质',p.condition]];
       $('details').innerHTML=rows.map(r=>`<div class="detail-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
-      currentImages=p.images&&p.images.length?p.images:[];currentImageIndex=0;
+      currentImages=p.images&&p.images.length?p.images:[p.cover];currentImageIndex=0;
       setMainImage(currentImages[0]);
       $('thumbs').innerHTML=currentImages.map((src,i)=>`<button class="thumb ${i===0?'active':''}" data-i="${i}"><img src="${src}" alt="图片${i+1}"></button>`).join('');
       document.querySelectorAll('.thumb').forEach(btn=>btn.onclick=()=>switchImage(Number(btn.dataset.i)));
@@ -206,7 +205,7 @@
     } window.openModal=openModal;
     function closeModal(){$('modal').classList.remove('open');closeLightbox(false);document.body.style.overflow='';}
     $('closeBtn').onclick=closeModal;$('continueBtn').onclick=closeModal;$('modalBackBtn').onclick=closeModal;$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
-    function openLightbox(){if(!currentImages.length||!currentImages[currentImageIndex])return;$('lightboxImg').src=currentImages[currentImageIndex];$('lightbox').classList.add('open');}
+    function openLightbox(){if(!currentImages.length)return;$('lightboxImg').src=currentImages[currentImageIndex];$('lightbox').classList.add('open');}
     function closeLightbox(clear=true){$('lightbox').classList.remove('open');if(clear)$('lightboxImg').removeAttribute('src');}
     function moveLightbox(delta){switchImage(currentImageIndex+delta);$('lightboxImg').src=currentImages[currentImageIndex];}
     $('lightboxClose').onclick=()=>closeLightbox();$('lightboxPrev').onclick=(e)=>{e.stopPropagation();moveLightbox(-1);};$('lightboxNext').onclick=(e)=>{e.stopPropagation();moveLightbox(1);};$('lightbox').addEventListener('click',e=>{if(e.target.id==='lightbox')closeLightbox();});
@@ -222,7 +221,6 @@
 请联系店主确认库存。`;} function copyCode(code){copyText(code);} window.copyCode=copyCode; $('copyConfirm').onclick=()=>currentProduct&&copyText(infoText(currentProduct,'确认'));$('copyCodeBtn').onclick=()=>currentProduct&&copyText(currentProduct.code); function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
     function goHome(){if($('modal').classList.contains('open'))closeModal();$('searchInput').value='';currentFilter='全部';currentSection=null;renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.goHome=goHome;
     function goBackLayer(){if($('lightbox').classList.contains('open')){closeLightbox();return;}if($('modal').classList.contains('open')){closeModal();return;}const q=$('searchInput').value.trim();if(q||currentFilter!=='全部'||currentSection){goHome();return;}window.scrollTo({top:0,behavior:'smooth'});}
-    if(window.netlifyIdentity){window.netlifyIdentity.on('init',user=>{if(!user){window.netlifyIdentity.on('login',()=>{document.location.href='/admin/';});}});}
     $('homeBtn').onclick=goHome;$('backBtn').onclick=goBackLayer;$('searchInput').addEventListener('input',renderGrid);loadProducts();
   </script>
 </body>

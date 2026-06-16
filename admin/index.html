@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>图册后台草稿 v5.1</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <title>图册后台 v5.1 · Cloudflare D1版</title>
   <style>
 
     :root{--bg:#fbfaf7;--card:#fff;--ink:#171717;--muted:#74706a;--line:#e6e1d8;--soft:#f4f1eb;--soft2:#faf7f1;--radius:22px;--shadow:0 18px 50px rgba(20,20,20,.07)}
@@ -181,10 +180,11 @@
   <section class="admin-shell" id="adminShell">
     <header class="admin-top">
       <div>
-        <h1>图册后台草稿 v5.1</h1>
-        <p>本地草稿 · 保存反馈增强 · 前台预览可返回后台</p>
+        <h1>图册后台 v5.1 · Cloudflare D1版</h1>
+        <p>Cloudflare D1 后台 · V5.1 交互锁定 · 前台预览可返回后台</p>
       </div>
-      <button class="admin-btn red" onclick="resetAll()">重置草稿</button>
+      <button class="admin-btn" onclick="changeAdminKey()">设置密钥</button>
+      <button class="admin-btn red" onclick="resetAll()">刷新云端数据</button>
     </header>
 
     <div class="admin-summary">
@@ -285,7 +285,7 @@
           <button class="admin-btn dark" id="saveProductBtn" onclick="saveProduct()">保存商品</button>
           <button class="admin-btn" onclick="resetFormWithConfirm()">重置所有字段</button>
         </div>
-        <div class="admin-save-notice" id="saveNotice">商品已保存。左侧列表已更新，前台预览也会使用最新草稿数据。</div>
+        <div class="admin-save-notice" id="saveNotice">商品已保存到 Cloudflare D1。左侧列表已更新，前台预览也会使用最新云端数据。</div>
       </aside>
     </main>
   </section>
@@ -354,100 +354,103 @@
     let formDirty = false;
     let dragIndex = null;
 
-    const starter = [
-      {id:"p1",section:"新品上新",code:"PF-NEW-001",style:"新品示例款 01",price:"¥189",color:"待补充",size:"S / M / XL / XXL",material:"聚酯纤维速干运动面料",note:"新品示例，正式版可替换为真实商品。",images:[]},
-      {id:"p2",section:"常规款式",code:"PF-STYLE-001",style:"多色泼墨足球风短袖",price:"¥129",color:"蓝 / 白 / 黑 / 米色",size:"S / M / XL / XXL",material:"聚酯纤维速干运动面料",note:"多色泼墨图案，适合日常搭配。",images:[]},
-      {id:"p3",section:"清仓打折",code:"PF-SALE-001",style:"清仓示例款 01",price:"¥99",color:"待补充",size:"S / M / XL / XXL",material:"聚酯纤维速干运动面料",note:"清仓示例，正式版可替换为真实商品。",images:[]}
-    ];
+    const API_BASE = 'https://style-catalog-api.893380992.workers.dev';
 
-    let draftProducts = starter.slice();
-
-    function currentUser(){
-      return window.netlifyIdentity && window.netlifyIdentity.currentUser();
+    function getAdminKey(){
+      let key = localStorage.getItem('styleCatalogAdminKey') || '';
+      if(!key){
+        key = prompt('请输入后台 ADMIN_KEY。这个密钥只保存在你的浏览器里，不要发给别人。') || '';
+        if(key) localStorage.setItem('styleCatalogAdminKey', key);
+      }
+      return key;
     }
 
-    async function getToken(){
-      const user = currentUser();
-      if(!user) throw new Error("请先登录后台");
-      return await user.jwt(true);
+    function changeAdminKey(){
+      const key = prompt('请输入新的 ADMIN_KEY。留空则不修改。') || '';
+      if(key){
+        localStorage.setItem('styleCatalogAdminKey', key);
+        showAdminToast('ADMIN_KEY 已更新');
+      }
     }
 
     async function api(path, options={}){
-      const jwt = await getToken();
-      const res = await fetch(path, {
-        ...options,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + jwt,
-          ...(options.headers || {})
-        }
-      });
-      const text = await res.text();
-      let data = {};
-      try{ data = text ? JSON.parse(text) : {}; }catch(e){ data = {message:text}; }
-      if(!res.ok) throw new Error(data.error || data.message || "请求失败");
+      const headers = {
+        'Content-Type':'application/json; charset=utf-8',
+        ...(options.headers || {})
+      };
+      if(path.includes('/api/admin/')) headers['X-Admin-Key'] = getAdminKey();
+      const res = await fetch(API_BASE + path, {...options, headers});
+      const data = await res.json().catch(()=>({}));
+      if(!res.ok || data.ok === false) throw new Error(data.error || '请求失败');
       return data;
     }
 
-    function normalizeProduct(p){
-      let imgs = [];
-      (p.images || []).forEach(x=>{
-        if(typeof x === "string") imgs.push(x);
-        else if(x && x.image) imgs.push(x.image);
-      });
-      if(p.cover && !imgs.includes(p.cover)) imgs.unshift(p.cover);
+    function normalizeRemoteProduct(p){
       return {
-        id:p.id || p.code || ("p"+Date.now()+Math.random()),
-        section:p.section || "常规款式",
-        code:p.code || "",
-        style:p.style || "",
-        price:p.price || "¥129",
-        color:p.color || "",
-        size:p.size || "S / M / XL / XXL",
-        material:p.material || p.condition || "聚酯纤维速干运动面料",
-        note:p.note || "",
-        images:imgs.slice(0,6)
+        id: p.id || ('p' + Date.now()),
+        section: p.section || '常规款式',
+        code: p.code || '',
+        style: p.style || '',
+        price: p.price || '¥129',
+        color: p.color || '',
+        size: p.size || 'S / M / XL / XXL',
+        material: p.material || p.condition || '聚酯纤维速干运动面料',
+        note: p.note || '',
+        images: Array.isArray(p.images) ? p.images.slice(0,6) : [],
+        sort_order: Number.isFinite(Number(p.sort_order)) ? Number(p.sort_order) : 0,
+        created_at: p.created_at || ''
       };
     }
 
+    let draftProducts = [];
+
     async function refreshProducts(){
       try{
-        showAdminToast("正在读取商品数据...");
-        const data = await api("/.netlify/functions/admin-products", {method:"GET"});
-        draftProducts = (data.products || []).map(normalizeProduct);
+        showAdminToast('正在读取 Cloudflare 商品数据...');
+        const data = await api('/api/products');
+        draftProducts = (data.products || []).map(normalizeRemoteProduct);
         renderAdminList();
         updateCounts();
-        showAdminToast("数据已刷新");
+        showAdminToast('云端数据已刷新');
       }catch(err){
-        showAdminToast("读取失败");
-        alert("读取失败：" + err.message + "\n\n请确认 GITHUB_TOKEN 已在 Netlify 环境变量中配置，并且已重新部署。");
+        showAdminToast('读取失败');
+        alert('读取失败：' + err.message + '
+
+请确认 Worker 地址、D1 绑定和 ADMIN_KEY 配置正常。');
       }
     }
 
-    function setDraftProducts(data){
-      draftProducts = data;
+    async function saveAllProductsToCloud(){
+      return await api('/api/admin/products', {
+        method:'POST',
+        body: JSON.stringify({products: draftProducts})
+      });
     }
 
-    function bootAuth(){
-      if(!window.netlifyIdentity){
-        alert("Netlify Identity 加载失败，请刷新页面重试。");
-        return;
-      }
-      window.netlifyIdentity.on("init", user=>{
-        if(user){
-          refreshProducts();
-        }else{
-          window.netlifyIdentity.open("login");
-        }
+    function setDraftProducts(data){ draftProducts = data; }
+
+    function isLocalImageData(src){ return typeof src === 'string' && src.startsWith('data:image/'); }
+    function compressImageDataUrl(dataUrl, maxSide = 1100, quality = 0.72){
+      return new Promise(resolve=>{
+        if(!isLocalImageData(dataUrl) || dataUrl.startsWith('data:image/gif')){ resolve(dataUrl); return; }
+        const img = new Image();
+        img.onload = ()=>{
+          try{
+            const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+            const w = Math.max(1, Math.round(img.width * scale));
+            const h = Math.max(1, Math.round(img.height * scale));
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+            ctx.drawImage(img,0,0,w,h);
+            const out = canvas.toDataURL('image/jpeg', quality);
+            resolve(out && out.length < dataUrl.length ? out : dataUrl);
+          }catch(e){ resolve(dataUrl); }
+        };
+        img.onerror = ()=>resolve(dataUrl);
+        img.src = dataUrl;
       });
-      window.netlifyIdentity.on("login", ()=>{
-        window.netlifyIdentity.close();
-        refreshProducts();
-      });
-      window.netlifyIdentity.on("logout", ()=>{
-        window.netlifyIdentity.open("login");
-      });
-      window.netlifyIdentity.init();
     }
 
     function markDirty(){ formDirty = true; }
@@ -544,69 +547,10 @@
       showAdminToast("表单已重置");
     }
 
-
-    function isLocalImageData(src){
-      return typeof src === "string" && src.startsWith("data:image/");
-    }
-
-    function compressImageDataUrl(dataUrl, maxSide = 1600, quality = 0.82){
-      return new Promise(resolve=>{
-        if(!isLocalImageData(dataUrl) || dataUrl.startsWith("data:image/gif")){
-          resolve(dataUrl);
-          return;
-        }
-        const img = new Image();
-        img.onload = ()=>{
-          try{
-            const maxOriginalSide = Math.max(img.width, img.height);
-            const scale = Math.min(1, maxSide / maxOriginalSide);
-            const w = Math.max(1, Math.round(img.width * scale));
-            const h = Math.max(1, Math.round(img.height * scale));
-            const canvas = document.createElement("canvas");
-            canvas.width = w;
-            canvas.height = h;
-            const ctx = canvas.getContext("2d");
-            ctx.fillStyle = "#fff";
-            ctx.fillRect(0, 0, w, h);
-            ctx.drawImage(img, 0, 0, w, h);
-            const out = canvas.toDataURL("image/jpeg", quality);
-            resolve(out && out.length < dataUrl.length ? out : dataUrl);
-          }catch(e){
-            resolve(dataUrl);
-          }
-        };
-        img.onerror = ()=>resolve(dataUrl);
-        img.src = dataUrl;
-      });
-    }
-
     async function saveProduct(){
       const btn = document.getElementById("saveProductBtn");
-      if(btn){
-        btn.disabled = true;
-        btn.textContent = "正在保存...";
-      }
+      if(btn){ btn.disabled = true; btn.textContent = "正在保存..."; }
       try{
-        const localCount = imageData.filter(isLocalImageData).length;
-        if(localCount > 0){
-          showAdminToast(`正在压缩并上传 ${localCount} 张图片...`);
-        }else{
-          showAdminToast("正在保存商品数据...");
-        }
-
-        const uploadedImages = await Promise.all(imageData.map(async (src, i)=>{
-          if(isLocalImageData(src)){
-            const optimized = await compressImageDataUrl(src);
-            const result = await api("/.netlify/functions/admin-upload-image", {
-              method:"POST",
-              body: JSON.stringify({filename:`product-${i+1}.jpg`, dataUrl:optimized})
-            });
-            return result.path;
-          }
-          return src;
-        }));
-
-        showAdminToast("正在写入商品数据...");
         const id = document.getElementById("editId").value || ("p" + Date.now());
         const sec = document.getElementById("section").value;
         const item = {
@@ -619,32 +563,28 @@
           size: document.getElementById("size").value.trim() || "S / M / XL / XXL",
           material: document.getElementById("material").value.trim() || "聚酯纤维速干运动面料",
           note: document.getElementById("note").value.trim(),
-          images: uploadedImages.slice(0,6)
+          images: imageData.slice(0,6)
         };
         const index = draftProducts.findIndex(p=>String(p.id)===String(id));
         if(index >= 0) draftProducts[index] = item;
         else draftProducts.push(item);
-
-        await api("/.netlify/functions/admin-products", {
-          method:"POST",
-          body: JSON.stringify({products:draftProducts})
-        });
-
+        draftProducts = draftProducts.map((p,i)=>({...p, sort_order:i+1}));
+        showAdminToast("正在保存到 Cloudflare D1...");
+        await saveAllProductsToCloud();
         adminSection = sec;
         formDirty = false;
         switchAdminSection(sec);
         clearForm();
-        showAdminToast("商品已保存");
+        showAdminToast("商品已保存到云端");
         showSaveSuccess();
         window.scrollTo({top:0,behavior:"smooth"});
       }catch(err){
         showAdminToast("保存失败");
-        alert("保存失败：" + err.message);
+        alert("保存失败：" + err.message + "
+
+如果是 Unauthorized，请检查 ADMIN_KEY 是否输入正确。");
       }finally{
-        if(btn){
-          btn.disabled = false;
-          btn.textContent = "保存商品";
-        }
+        if(btn){ btn.disabled = false; btn.textContent = "保存商品"; }
       }
     }
 
@@ -670,13 +610,10 @@
     }
 
     async function deleteProduct(id){
-      if(!confirm("确定删除这个商品草稿吗？")) return;
+      if(!confirm("确定删除这个商品吗？删除后会同步到 Cloudflare D1。")) return;
       try{
         draftProducts = draftProducts.filter(p=>String(p.id)!==String(id));
-        await api("/.netlify/functions/admin-products", {
-          method:"POST",
-          body: JSON.stringify({products:draftProducts})
-        });
+        await api('/api/admin/products/' + encodeURIComponent(id), {method:'DELETE'});
         renderAdminList();
         showAdminToast("已删除");
       }catch(err){
@@ -696,9 +633,9 @@
       }
       const files = selected.slice(0, remaining);
       const ignored = selected.length - files.length;
-      showAdminToast("正在处理图片...");
       let loaded = new Array(files.length);
       let count = 0;
+      showAdminToast("正在压缩图片...");
       files.forEach((file, i)=>{
         const reader = new FileReader();
         reader.onload = async ev => {
@@ -786,10 +723,9 @@
     }
 
     function resetAll(){
-      if(!confirm("正式后台不会一键清空线上商品。是否清空当前表单并重新读取 GitHub 数据？")) return;
+      if(!confirm("是否重新读取 Cloudflare 云端数据？当前未保存的表单内容会被清空。")) return;
       clearForm();
       refreshProducts();
-      showAdminToast("已刷新");
     }
 
 
@@ -943,7 +879,7 @@
     renderAdminList();
     renderImages();
     updateCounts();
-    bootAuth();
+    refreshProducts();
   </script>
 </body>
 </html>
