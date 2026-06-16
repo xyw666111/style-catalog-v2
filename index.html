@@ -142,7 +142,7 @@
       const cover=normalizeImageValue(p.cover)||imgs[0]||'';
       return {...p, cover, images:imgs.length?imgs:(cover?[cover]:[]), category:p.category||'短袖', section:p.section||'常规款式', price:p.price||'¥129', size:p.size||'S / M / XL / XXL', condition:p.condition||'聚酯纤维速干运动面料', imagePosition:p.imagePosition||'center center'};
     }
-    const API_BASE='https://style-catalog-api.893380992.workers.dev';
+    const API_BASE='';
     async function loadProducts(){
       try{
         const res=await fetch(API_BASE + '/api/products',{cache:'no-store'});

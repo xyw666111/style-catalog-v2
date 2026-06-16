@@ -1,0 +1,1 @@
+Cloudflare 同域名 API 修复包 v1 已部署时，访问 /api/health 应返回 Pages Functions 已连接 D1。
