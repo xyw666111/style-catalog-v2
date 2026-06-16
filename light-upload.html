@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>轻量图片测试上传</title>
+  <style>
+    body{margin:0;padding:18px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;background:#fbfaf7;color:#171717}
+    h1{font-size:22px;margin:0 0 10px}.muted{color:#777;font-size:13px;line-height:1.7}.box{background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:14px;margin:14px 0}.field{margin:12px 0}.field label{display:block;font-size:13px;color:#666;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;box-sizing:border-box;border:1px solid #e6e1d8;border-radius:14px;background:#fff;padding:12px;font:inherit}.field textarea{min-height:72px}.btn{width:100%;border:0;border-radius:999px;background:#111;color:#fff;padding:14px;font-weight:700;font:inherit;margin-top:10px}.btn:disabled{opacity:.45}.warn{background:#fff7ed;border-color:#fed7aa;color:#8a4b0a}.ok{color:#0a7a32}.bad{color:#9a312d}.preview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.preview img{width:100%;height:90px;object-fit:cover;border-radius:12px;border:1px solid #eee}.small{font-size:12px;color:#777;line-height:1.6}
+  </style>
+</head>
+<body>
+  <h1>轻量图片测试上传</h1>
+  <p class="muted">这个页面用于临时测试手机端加载。图片会被强压缩，避免 /api/products 过大。</p>
+  <div class="box warn"><b>注意：</b>点击保存后，会用下面这个测试商品覆盖当前线上商品列表。请只在测试阶段使用。</div>
+  <div class="box">
+    <div class="field"><label>ADMIN_KEY（只在你浏览器里使用，不要发给别人）</label><input id="key" type="password" placeholder="输入后台密钥"></div>
+    <div class="field"><label>分区</label><select id="section"><option>新品上新</option><option>常规款式</option><option>清仓打折</option></select></div>
+    <div class="field"><label>商品编号</label><input id="code" value="PF-MOBILE-001"></div>
+    <div class="field"><label>款式名称</label><input id="style" value="手机端轻量测试款"></div>
+    <div class="field"><label>价格</label><select id="price"><option>¥189</option><option>¥129</option><option>¥99</option></select></div>
+    <div class="field"><label>颜色</label><input id="color" value="测试配色"></div>
+    <div class="field"><label>尺码</label><input id="size" value="S / M / L / XL"></div>
+    <div class="field"><label>材质</label><input id="material" value="聚酯纤维速干运动面料"></div>
+    <div class="field"><label>备注</label><textarea id="note">这是用于验证手机端是否能正常加载的轻量图片测试商品。</textarea></div>
+    <div class="field"><label>商品图片（建议先选 1 张）</label><input id="imgs" type="file" accept="image/*" multiple></div>
+    <div class="small" id="info">未选择图片</div>
+    <div class="preview" id="preview"></div>
+    <button class="btn" id="save">保存这个轻量测试商品</button>
+    <div class="small" id="result"></div>
+  </div>
+<script>
+let imageData=[];
+const $=id=>document.getElementById(id);
+$('imgs').addEventListener('change', async e=>{
+  imageData=[]; $('preview').innerHTML=''; $('info').textContent='正在压缩图片...';
+  const files=Array.from(e.target.files).slice(0,3);
+  for(const file of files){ imageData.push(await compressFile(file)); }
+  const total=imageData.reduce((n,s)=>n+s.length,0);
+  $('info').innerHTML='已压缩 '+imageData.length+' 张，图片数据合计约 '+Math.round(total/1024)+' KB';
+  $('preview').innerHTML=imageData.map(src=>'<img src="'+src+'">').join('');
+});
+async function compressFile(file){
+  const dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxSide=520, quality=0.48;
+      const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+      const w=Math.max(1,Math.round(img.width*scale));
+      const h=Math.max(1,Math.round(img.height*scale));
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+      resolve(canvas.toDataURL('image/jpeg',quality));
+    };
+    img.onerror=()=>resolve(dataUrl);
+    img.src=dataUrl;
+  });
+}
+$('save').onclick=async ()=>{
+  const key=$('key').value.trim(); if(!key){alert('请先输入 ADMIN_KEY');return;}
+  if(!imageData.length && !confirm('你还没有选择图片，确定保存无图商品吗？')) return;
+  if(!confirm('确认用这个轻量测试商品覆盖当前线上商品列表吗？')) return;
+  $('save').disabled=true; $('result').textContent='正在保存...';
+  const item={
+    id:'mobile-test-'+Date.now(),
+    section:$('section').value,
+    code:$('code').value.trim()||'PF-MOBILE-001',
+    style:$('style').value.trim()||'手机端轻量测试款',
+    price:$('price').value,
+    color:$('color').value.trim()||'测试配色',
+    size:$('size').value.trim()||'S / M / L / XL',
+    material:$('material').value.trim()||'聚酯纤维速干运动面料',
+    note:$('note').value.trim(),
+    images:imageData.slice(0,3),
+    sort_order:1
+  };
+  try{
+    const res=await fetch('/api/admin/products',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':key},body:JSON.stringify({products:[item]}),cache:'no-store'});
+    const data=await res.json().catch(()=>({ok:false,error:'接口返回不是 JSON'}));
+    if(!res.ok || data.ok===false) throw new Error(data.error||('请求失败 '+res.status));
+    $('result').innerHTML='<b class="ok">保存成功。</b>现在可以去手机前台测试。';
+  }catch(err){
+    $('result').innerHTML='<b class="bad">保存失败：</b>'+escapeHtml(err.message||String(err));
+  }finally{$('save').disabled=false;}
+};
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+</script>
+</body>
+</html>
