@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>图册后台 v5.1 · Cloudflare D1版</title>
+  <title>图册后台草稿 v5.1</title>
   <style>
 
     :root{--bg:#fbfaf7;--card:#fff;--ink:#171717;--muted:#74706a;--line:#e6e1d8;--soft:#f4f1eb;--soft2:#faf7f1;--radius:22px;--shadow:0 18px 50px rgba(20,20,20,.07)}
@@ -172,19 +172,31 @@
 .admin-save-notice.show{display:block}
 .preview-return-btn{position:fixed;right:18px;bottom:18px;z-index:70;background:#111;color:#fff;border:0;border-radius:999px;padding:12px 18px;box-shadow:0 12px 30px rgba(0,0,0,.18);font-family:inherit;cursor:pointer}
 @media(max-width:860px){.admin-main{grid-template-columns:1fr}.admin-form{position:static}.admin-summary{grid-template-columns:1fr 1fr 1fr}}
+
+.admin-login{max-width:520px;margin:80px auto;background:#fff;border:1px solid #e7e1d7;border-radius:22px;box-shadow:0 18px 50px rgba(30,24,15,.08);padding:26px;color:#111}
+.admin-login h1{margin:0 0 8px;font-size:25px;letter-spacing:-.03em}.admin-login p{color:#666;line-height:1.7;margin:0 0 18px;font-size:14px}.admin-login input{width:100%;border:1px solid #e7e1d7;background:#fbfaf7;border-radius:14px;padding:13px 14px;outline:none;font-family:inherit;margin:8px 0 12px}.admin-login .admin-btn{width:100%;}.admin-login small{display:block;color:#888;line-height:1.6;margin-top:12px}
+
 @media(max-width:560px){.admin-shell{padding:18px 14px 42px}.admin-top{align-items:flex-start;flex-direction:column}.admin-summary{grid-template-columns:1fr}.admin-main{gap:14px}.admin-item{grid-template-columns:60px 1fr}.admin-thumb{width:60px;height:60px}.admin-item-actions{grid-column:1/3;width:100%}.admin-item-actions .admin-smallbtn{flex:1}.admin-row{grid-template-columns:1fr}.admin-image-grid{grid-template-columns:repeat(2,1fr)}}
 
   </style>
 </head>
 <body>
-  <section class="admin-shell" id="adminShell">
+  <section class="admin-login" id="loginShell">
+    <h1>图册后台 · Cloudflare 版</h1>
+    <p>请输入你在 Cloudflare Worker 里设置的 <b>ADMIN_KEY</b>。密钥只会保存在你当前浏览器里，不要发给任何人。</p>
+    <label style="font-size:13px;color:#555">管理员密钥</label>
+    <input id="adminKeyInput" type="password" placeholder="粘贴 ADMIN_KEY">
+    <button class="admin-btn dark" onclick="loginAdmin()">进入后台</button>
+    <small>进入后，商品会从 Cloudflare D1 读取；保存商品会直接写入 D1，不再触发部署。</small>
+  </section>
+
+  <section class="admin-shell" id="adminShell" style="display:none">
     <header class="admin-top">
       <div>
-        <h1>图册后台 v5.1 · Cloudflare D1版</h1>
-        <p>Cloudflare D1 后台 · V5.1 交互锁定 · 前台预览可返回后台</p>
+        <h1>图册后台 v5.1 · Cloudflare 版</h1>
+        <p>后台交互沿用 V5.1，商品数据保存到 Cloudflare D1。</p>
       </div>
-      <button class="admin-btn" onclick="changeAdminKey()">设置密钥</button>
-      <button class="admin-btn red" onclick="resetAll()">刷新云端数据</button>
+      <button class="admin-btn red" onclick="logoutAdmin()">退出密钥</button>
     </header>
 
     <div class="admin-summary">
@@ -285,7 +297,7 @@
           <button class="admin-btn dark" id="saveProductBtn" onclick="saveProduct()">保存商品</button>
           <button class="admin-btn" onclick="resetFormWithConfirm()">重置所有字段</button>
         </div>
-        <div class="admin-save-notice" id="saveNotice">商品已保存到 Cloudflare D1。左侧列表已更新，前台预览也会使用最新云端数据。</div>
+        <div class="admin-save-notice" id="saveNotice">商品已保存到 Cloudflare D1。左侧列表和前台都会读取最新数据。</div>
       </aside>
     </main>
   </section>
@@ -354,103 +366,68 @@
     let formDirty = false;
     let dragIndex = null;
 
-    const API_BASE = 'https://style-catalog-api.893380992.workers.dev';
-
-    function getAdminKey(){
-      let key = localStorage.getItem('styleCatalogAdminKey') || '';
-      if(!key){
-        key = prompt('请输入后台 ADMIN_KEY。这个密钥只保存在你的浏览器里，不要发给别人。') || '';
-        if(key) localStorage.setItem('styleCatalogAdminKey', key);
-      }
-      return key;
-    }
-
-    function changeAdminKey(){
-      const key = prompt('请输入新的 ADMIN_KEY。留空则不修改。') || '';
-      if(key){
-        localStorage.setItem('styleCatalogAdminKey', key);
-        showAdminToast('ADMIN_KEY 已更新');
-      }
-    }
-
-    async function api(path, options={}){
-      const headers = {
-        'Content-Type':'application/json; charset=utf-8',
-        ...(options.headers || {})
-      };
-      if(path.includes('/api/admin/')) headers['X-Admin-Key'] = getAdminKey();
-      const res = await fetch(API_BASE + path, {...options, headers});
-      const data = await res.json().catch(()=>({}));
-      if(!res.ok || data.ok === false) throw new Error(data.error || '请求失败');
-      return data;
-    }
-
-    function normalizeRemoteProduct(p){
-      return {
-        id: p.id || ('p' + Date.now()),
-        section: p.section || '常规款式',
-        code: p.code || '',
-        style: p.style || '',
-        price: p.price || '¥129',
-        color: p.color || '',
-        size: p.size || 'S / M / XL / XXL',
-        material: p.material || p.condition || '聚酯纤维速干运动面料',
-        note: p.note || '',
-        images: Array.isArray(p.images) ? p.images.slice(0,6) : [],
-        sort_order: Number.isFinite(Number(p.sort_order)) ? Number(p.sort_order) : 0,
-        created_at: p.created_at || ''
-      };
-    }
-
+    const API_BASE = "https://style-catalog-api.893380992.workers.dev";
+    let adminKey = localStorage.getItem("catalogCloudflareAdminKey") || "";
     let draftProducts = [];
 
-    async function refreshProducts(){
-      try{
-        showAdminToast('正在读取 Cloudflare 商品数据...');
-        const data = await api('/api/products');
-        draftProducts = (data.products || []).map(normalizeRemoteProduct);
-        renderAdminList();
-        updateCounts();
-        showAdminToast('云端数据已刷新');
-      }catch(err){
-        showAdminToast('读取失败');
-        alert('读取失败：' + err.message + '
-
-请确认 Worker 地址、D1 绑定和 ADMIN_KEY 配置正常。');
-      }
+    function getAdminKey(){ return adminKey || localStorage.getItem("catalogCloudflareAdminKey") || ""; }
+    function showLogin(){
+      document.getElementById("loginShell").style.display = "block";
+      document.getElementById("adminShell").style.display = "none";
     }
-
-    async function saveAllProductsToCloud(){
-      return await api('/api/admin/products', {
-        method:'POST',
-        body: JSON.stringify({products: draftProducts})
-      });
+    function showAdmin(){
+      document.getElementById("loginShell").style.display = "none";
+      document.getElementById("adminShell").style.display = "block";
     }
-
-    function setDraftProducts(data){ draftProducts = data; }
-
-    function isLocalImageData(src){ return typeof src === 'string' && src.startsWith('data:image/'); }
-    function compressImageDataUrl(dataUrl, maxSide = 1100, quality = 0.72){
-      return new Promise(resolve=>{
-        if(!isLocalImageData(dataUrl) || dataUrl.startsWith('data:image/gif')){ resolve(dataUrl); return; }
-        const img = new Image();
-        img.onload = ()=>{
-          try{
-            const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
-            const w = Math.max(1, Math.round(img.width * scale));
-            const h = Math.max(1, Math.round(img.height * scale));
-            const canvas = document.createElement('canvas');
-            canvas.width = w; canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
-            ctx.drawImage(img,0,0,w,h);
-            const out = canvas.toDataURL('image/jpeg', quality);
-            resolve(out && out.length < dataUrl.length ? out : dataUrl);
-          }catch(e){ resolve(dataUrl); }
-        };
-        img.onerror = ()=>resolve(dataUrl);
-        img.src = dataUrl;
-      });
+    async function api(path, options={}){
+      const headers = Object.assign({"Content-Type":"application/json"}, options.headers || {});
+      if(options.admin !== false){ headers["X-Admin-Key"] = getAdminKey(); }
+      const res = await fetch(API_BASE + path, {...options, headers, cache:"no-store"});
+      const data = await res.json().catch(()=>({ok:false,error:"接口返回不是 JSON"}));
+      if(!res.ok || data.ok === false){ throw new Error(data.error || ("请求失败：" + res.status)); }
+      return data;
+    }
+    async function loadProductsFromCloudflare(){
+      showAdminToast("正在读取商品...");
+      const data = await api("/api/products", {method:"GET", admin:false});
+      draftProducts = (data.products || []).map((p,i)=>({
+        ...p,
+        images: Array.isArray(p.images) ? p.images : [],
+        section: p.section || "常规款式",
+        price: p.price || "¥129",
+        size: p.size || "S / M / XL / XXL",
+        material: p.material || p.condition || "聚酯纤维速干运动面料",
+        sort_order: p.sort_order || i + 1
+      }));
+      renderAdminList();
+      renderImages();
+      updateCounts();
+      showAdminToast("已读取 Cloudflare 商品");
+    }
+    async function saveAllProductsToCloudflare(message="商品已保存"){
+      const products = draftProducts.map((p,i)=>({...p, sort_order:i+1}));
+      const data = await api("/api/admin/products", {method:"POST", body: JSON.stringify({products})});
+      draftProducts = (data.products || products).map(p=>({...p, images:Array.isArray(p.images)?p.images:[]}));
+      renderAdminList();
+      updateCounts();
+      showAdminToast(message);
+    }
+    async function loginAdmin(){
+      const key = document.getElementById("adminKeyInput").value.trim();
+      if(!key){ alert("请先输入 ADMIN_KEY"); return; }
+      adminKey = key;
+      localStorage.setItem("catalogCloudflareAdminKey", key);
+      showAdmin();
+      try{ await loadProductsFromCloudflare(); }
+      catch(err){ showLogin(); alert("读取失败：" + err.message); }
+    }
+    function logoutAdmin(){
+      if(!confirm("确定退出并清除本浏览器保存的 ADMIN_KEY 吗？")) return;
+      localStorage.removeItem("catalogCloudflareAdminKey");
+      adminKey = "";
+      draftProducts = [];
+      clearForm();
+      showLogin();
     }
 
     function markDirty(){ formDirty = true; }
@@ -549,6 +526,7 @@
 
     async function saveProduct(){
       const btn = document.getElementById("saveProductBtn");
+      const oldText = btn ? btn.textContent : "保存商品";
       if(btn){ btn.disabled = true; btn.textContent = "正在保存..."; }
       try{
         const id = document.getElementById("editId").value || ("p" + Date.now());
@@ -565,32 +543,26 @@
           note: document.getElementById("note").value.trim(),
           images: imageData.slice(0,6)
         };
-        const index = draftProducts.findIndex(p=>String(p.id)===String(id));
+        const index = draftProducts.findIndex(p=>p.id===id);
         if(index >= 0) draftProducts[index] = item;
         else draftProducts.push(item);
-        draftProducts = draftProducts.map((p,i)=>({...p, sort_order:i+1}));
-        showAdminToast("正在保存到 Cloudflare D1...");
-        await saveAllProductsToCloud();
         adminSection = sec;
         formDirty = false;
+        await saveAllProductsToCloudflare("商品已保存到 Cloudflare");
         switchAdminSection(sec);
         clearForm();
-        showAdminToast("商品已保存到云端");
         showSaveSuccess();
         window.scrollTo({top:0,behavior:"smooth"});
       }catch(err){
-        showAdminToast("保存失败");
-        alert("保存失败：" + err.message + "
-
-如果是 Unauthorized，请检查 ADMIN_KEY 是否输入正确。");
+        alert("保存失败：" + err.message + "。如果提示 Unauthorized，请检查 ADMIN_KEY 是否正确。");
       }finally{
-        if(btn){ btn.disabled = false; btn.textContent = "保存商品"; }
+        if(btn){ btn.disabled = false; btn.textContent = oldText; }
       }
     }
 
     function editProduct(id){
       if(!confirmLeaveEdit()) return;
-      const p = draftProducts.find(x=>String(x.id)===String(id));
+      const p = draftProducts.find(x=>x.id===id);
       if(!p) return;
       document.getElementById("editId").value = p.id;
       document.getElementById("section").value = p.section;
@@ -611,15 +583,39 @@
 
     async function deleteProduct(id){
       if(!confirm("确定删除这个商品吗？删除后会同步到 Cloudflare D1。")) return;
+      const old = draftProducts.slice();
+      draftProducts = draftProducts.filter(p=>p.id!==id);
       try{
-        draftProducts = draftProducts.filter(p=>String(p.id)!==String(id));
-        await api('/api/admin/products/' + encodeURIComponent(id), {method:'DELETE'});
+        await api("/api/admin/products/" + encodeURIComponent(id), {method:"DELETE"});
         renderAdminList();
-        showAdminToast("已删除");
+        showAdminToast("已删除并同步");
       }catch(err){
-        showAdminToast("删除失败");
+        draftProducts = old;
+        renderAdminList();
         alert("删除失败：" + err.message);
       }
+    }
+
+    function compressImageDataUrl(dataUrl, maxSide = 1200, quality = 0.76){
+      return new Promise(resolve=>{
+        const img = new Image();
+        img.onload = ()=>{
+          try{
+            const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+            const w = Math.max(1, Math.round(img.width * scale));
+            const h = Math.max(1, Math.round(img.height * scale));
+            const canvas = document.createElement("canvas");
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#fff"; ctx.fillRect(0,0,w,h);
+            ctx.drawImage(img,0,0,w,h);
+            const out = canvas.toDataURL("image/jpeg", quality);
+            resolve(out && out.length < dataUrl.length ? out : dataUrl);
+          }catch(e){ resolve(dataUrl); }
+        };
+        img.onerror = ()=>resolve(dataUrl);
+        img.src = dataUrl;
+      });
     }
 
     function loadImages(e){
@@ -633,9 +629,9 @@
       }
       const files = selected.slice(0, remaining);
       const ignored = selected.length - files.length;
+      showAdminToast("正在处理图片...");
       let loaded = new Array(files.length);
       let count = 0;
-      showAdminToast("正在压缩图片...");
       files.forEach((file, i)=>{
         const reader = new FileReader();
         reader.onload = async ev => {
@@ -722,10 +718,20 @@
       return prefix + n;
     }
 
-    function resetAll(){
-      if(!confirm("是否重新读取 Cloudflare 云端数据？当前未保存的表单内容会被清空。")) return;
-      clearForm();
-      refreshProducts();
+    async function resetAll(){
+      if(!confirm("确定清空所有线上商品数据吗？这个操作会同步到 Cloudflare D1。")) return;
+      const old = draftProducts.slice();
+      draftProducts = [];
+      try{
+        await saveAllProductsToCloudflare("已清空线上商品");
+        adminSection = "新品上新";
+        switchAdminSection("新品上新");
+        clearForm();
+      }catch(err){
+        draftProducts = old;
+        renderAdminList();
+        alert("清空失败：" + err.message);
+      }
     }
 
 
@@ -876,10 +882,19 @@
     function goBackLayer(){if($('lightbox').classList.contains('open')){closeLightbox();return;}if($('modal').classList.contains('open')){closeModal();return;}const q=$('searchInput').value.trim();if(q||currentFilter!=='全部'||currentSection){goHome();return;}window.scrollTo({top:0,behavior:'smooth'});}
     $('homeBtn').onclick=goHome;$('backBtn').onclick=goBackLayer;$('searchInput').addEventListener('input',renderGrid);
 
-    renderAdminList();
-    renderImages();
-    updateCounts();
-    refreshProducts();
+    async function initAdmin(){
+      renderImages();
+      updateCounts();
+      if(adminKey){
+        document.getElementById("adminKeyInput").value = adminKey;
+        showAdmin();
+        try{ await loadProductsFromCloudflare(); }
+        catch(err){ showLogin(); alert("读取失败：" + err.message); }
+      }else{
+        showLogin();
+      }
+    }
+    initAdmin();
   </script>
 </body>
 </html>

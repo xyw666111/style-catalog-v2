@@ -1,0 +1,1 @@
+Cloudflare 后台修复包 v1.1：补充 admin/index.html，打开 /admin/ 会显示 ADMIN_KEY 输入区，保存商品写入 Cloudflare Worker + D1。
