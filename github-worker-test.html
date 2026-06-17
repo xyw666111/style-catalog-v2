@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Worker GitHub Token 测试</title>
+  <style>
+    body{margin:0;padding:18px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;background:#fbfaf7;color:#171717}
+    h1{font-size:22px;margin:0 0 10px}.muted{color:#777;font-size:13px;line-height:1.7}.box{background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:14px;margin:14px 0}.field{margin:12px 0}.field label{display:block;font-size:13px;color:#666;margin-bottom:6px}.field input{width:100%;box-sizing:border-box;border:1px solid #e6e1d8;border-radius:14px;background:#fff;padding:12px;font:inherit}.btn{width:100%;border:0;border-radius:999px;background:#111;color:#fff;padding:14px;font-weight:700;font:inherit;margin-top:10px}.small{font-size:12px;color:#777;line-height:1.7;word-break:break-all;white-space:pre-wrap}.ok{color:#0a7a32}.bad{color:#9a312d}pre{background:#f4f1eb;border-radius:12px;padding:12px;overflow:auto;white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <h1>Worker GitHub Token 测试</h1>
+  <p class="muted">这个页面只测试 Worker 是否能用隐藏的 GITHUB_TOKEN 访问 GitHub 仓库，不会上传商品图片。</p>
+  <div class="box">
+    <div class="field"><label>ADMIN_KEY</label><input id="key" type="password" placeholder="输入后台密钥"></div>
+    <button class="btn" id="test">测试 GitHub Token 访问权限</button>
+    <div class="small" id="status"></div>
+    <pre id="result" style="display:none"></pre>
+  </div>
+<script>
+const WORKER_API='https://style-catalog-api.893380992.workers.dev';
+const $=id=>document.getElementById(id);
+$('test').onclick=async()=>{
+  const key=$('key').value.trim();
+  if(!key){alert('请先输入 ADMIN_KEY');return;}
+  $('status').textContent='正在测试...';
+  $('result').style.display='none';
+  try{
+    const res=await fetch(WORKER_API+'/api/admin/github-check',{headers:{'X-Admin-Key':key},cache:'no-store'});
+    const data=await res.json().catch(()=>({ok:false,error:'接口返回不是 JSON'}));
+    $('result').textContent=JSON.stringify(data,null,2);
+    $('result').style.display='block';
+    if(res.ok&&data.ok){
+      $('status').innerHTML='<b class="ok">测试通过：Worker 可以访问 GitHub 仓库。</b>';
+    }else{
+      $('status').innerHTML='<b class="bad">测试失败：</b>'+(data.error||('HTTP '+res.status));
+    }
+  }catch(err){
+    $('status').innerHTML='<b class="bad">请求失败：</b>'+String(err.message||err);
+  }
+};
+</script>
+</body>
+</html>
