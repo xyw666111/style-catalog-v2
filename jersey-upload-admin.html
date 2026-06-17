@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>球衣图片上架后台</title>
+  <style>
+    :root{--bg:#fbfaf7;--card:#fff;--line:#e8e1d6;--text:#181818;--muted:#777;--soft:#f4f1eb;--black:#111;--green:#067a36;--red:#a33a2f;}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.wrap{max-width:1180px;margin:0 auto;padding:18px}h1{font-size:26px;margin:0 0 8px}.sub{font-size:14px;color:var(--muted);line-height:1.7;margin:0 0 14px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:14px 0;box-shadow:0 8px 24px rgba(0,0,0,.035)}.card h2{font-size:18px;margin:0 0 12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.field{margin:8px 0}.field label{display:block;font-size:13px;color:#5f5a52;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;font:inherit;outline:none}.field textarea{min-height:78px;resize:vertical}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}.chip.active{background:#111;color:#fff;border-color:#111}.btn{border:0;border-radius:999px;background:var(--black);color:#fff;padding:13px 18px;font-weight:700;font:inherit;cursor:pointer}.btn.secondary{background:#fff;color:#111;border:1px solid #111}.btn.ghost{background:var(--soft);color:#111}.btn:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.notice{font-size:13px;line-height:1.7;background:var(--soft);border-radius:14px;padding:12px;color:#6d6257}.ok{color:var(--green);font-weight:700}.bad{color:var(--red);font-weight:700}.small{font-size:12px;color:var(--muted);line-height:1.7;word-break:break-all}.image-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}.img-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}.img-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--soft);display:block}.img-card .meta{padding:10px}.progress{height:10px;background:var(--soft);border-radius:999px;overflow:hidden;margin-top:8px}.bar{height:100%;width:0;background:#111;transition:.2s}.sticky{position:sticky;bottom:0;background:rgba(251,250,247,.92);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px;margin:18px -18px -18px}.summary{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}.linkbox{background:#f7f4ef;border:1px solid var(--line);border-radius:12px;padding:10px;margin-top:10px;font-size:12px;word-break:break-all}.topline{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.pill{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 10px;background:#fff;font-size:12px;color:#5f5a52}@media(max-width:760px){.grid2,.grid3,.image-grid,.summary{grid-template-columns:1fr}.wrap{padding:12px}.sticky{margin:14px -12px -12px}.topline{display:block}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topline">
+      <div>
+        <h1>球衣图片上架后台</h1>
+        <p class="sub">填商品信息，选择图片，系统自动压缩、改名、上传 GitHub，并保存到 D1。GitHub Token 不在网页里，只由 Worker 使用。</p>
+      </div>
+      <span class="pill">方案 B 自动化版</span>
+    </div>
+
+    <div class="card">
+      <h2>第一块：商品信息</h2>
+      <div class="field">
+        <label>ADMIN_KEY</label>
+        <input id="adminKey" type="password" placeholder="输入后台密钥">
+      </div>
+      <div class="grid3">
+        <div class="field">
+          <label>分区</label>
+          <select id="section">
+            <option value="新品上新">新品上新</option>
+            <option value="常规款式">常规款式</option>
+            <option value="清仓打折">清仓打折</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>价格</label>
+          <select id="price">
+            <option value="¥189">¥189</option>
+            <option value="¥129">¥129</option>
+            <option value="¥99">¥99</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>商品编号（自动生成，可手动改）</label>
+          <input id="code" placeholder="例如 PF-NEW-001">
+        </div>
+      </div>
+      <div class="row" style="margin:8px 0 4px">
+        <button class="btn ghost" id="nextCodeBtn" type="button">生成下一个编号</button>
+        <span class="small" id="codeStatus">输入 ADMIN_KEY 后可自动取下一个编号。</span>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>款式名称</label>
+          <input id="style" placeholder="例如 巴萨复古主场短袖球衣">
+          <div class="chips" id="styleChips"></div>
+        </div>
+        <div class="field">
+          <label>颜色</label>
+          <input id="color" placeholder="例如 红蓝 / 黑金 / 蓝白">
+          <div class="chips" id="colorChips"></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>尺码</label>
+          <input id="size" value="S / M / L / XL">
+          <div class="chips" id="sizeChips"></div>
+        </div>
+        <div class="field">
+          <label>材质</label>
+          <input id="material" value="聚酯纤维速干运动面料">
+          <div class="chips" id="materialChips"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>备注</label>
+        <textarea id="note" placeholder="商品描述、版型、库存备注等，可不填"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>第二块：图片选择与压缩预览</h2>
+      <div class="notice">选择 1–6 张图片后，点击“压缩并生成文件名”。系统会按商品编号自动生成 JPG 文件名，例如 PF-NEW-001-1.jpg。</div>
+      <div class="grid3">
+        <div class="field">
+          <label>选择图片</label>
+          <input id="files" type="file" accept="image/*" multiple>
+        </div>
+        <div class="field">
+          <label>最长边像素</label>
+          <select id="maxSide">
+            <option value="900">900（推荐，速度快）</option>
+            <option value="1100">1100（更清晰）</option>
+            <option value="700">700（更小更快）</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>压缩质量</label>
+          <select id="quality">
+            <option value="0.72">0.72（推荐）</option>
+            <option value="0.62">0.62（更小）</option>
+            <option value="0.82">0.82（更清晰）</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn secondary" id="processBtn" type="button">压缩并生成文件名</button>
+        <span class="small" id="imageStatus">未选择图片</span>
+      </div>
+      <div class="image-grid" id="imageList"></div>
+    </div>
+
+    <div class="card">
+      <h2>第三块：一键上传并保存</h2>
+      <div class="notice">保存顺序：先检查同名图片 → 上传图片到 GitHub → 图片成功后保存商品到 D1。同名图片默认禁止覆盖。</div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="small" id="saveStatus" style="margin-top:10px">等待操作</div>
+      <div id="resultLinks"></div>
+      <div class="sticky">
+        <div class="summary">
+          <div class="small" id="summaryText">准备好商品信息和图片后，点击右侧按钮。</div>
+          <button class="btn" id="saveBtn" type="button">一键上传并保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const WORKER_API='https://style-catalog-api.893380992.workers.dev';
+const FRONT_URL='https://style-catalog-v2.pages.dev/index.html';
+const $=id=>document.getElementById(id);
+const defaults={
+  '新品上新':{price:'¥189'},
+  '常规款式':{price:'¥129'},
+  '清仓打折':{price:'¥99'}
+};
+let processed=[];
+let autoCode=true;
+
+makeChips('styleChips',['主场款','客场款','训练款','复古款','短袖','长袖','球迷版','球员版'],chip=>appendToInput('style',chip));
+makeChips('colorChips',['红色','蓝色','黑色','白色','绿色','黄色','红蓝','蓝白','黑金','红白','紫色','橙色'],chip=>setOrAppend('color',chip));
+makeChips('sizeChips',['S / M / L / XL','M / L / XL / XXL','L / XL','均码'],chip=>$('size').value=chip);
+makeChips('materialChips',['聚酯纤维速干运动面料','透气速干面料','复古球衣面料'],chip=>$('material').value=chip);
+
+$('section').addEventListener('change',()=>{applySectionDefaults(); if(autoCode) fetchNextCode();});
+$('adminKey').addEventListener('change',()=>{if(autoCode) fetchNextCode();});
+$('code').addEventListener('input',()=>{autoCode=false; updateSummary();});
+['style','color','size','material','note','price'].forEach(id=>$(id).addEventListener('input',updateSummary));
+$('nextCodeBtn').onclick=()=>{autoCode=true;fetchNextCode(true);};
+$('files').addEventListener('change',()=>{$('imageStatus').textContent='已选择 '+$('files').files.length+' 张图片，请点击压缩。';processed=[];$('imageList').innerHTML='';updateSummary();});
+$('processBtn').onclick=processImages;
+$('saveBtn').onclick=saveProduct;
+
+applySectionDefaults();
+updateSummary();
+
+function applySectionDefaults(){
+  const section=$('section').value;
+  $('price').value=(defaults[section]||defaults['常规款式']).price;
+  updateSummary();
+}
+async function fetchNextCode(force=false){
+  const key=$('adminKey').value.trim();
+  if(!key){$('codeStatus').textContent='请先输入 ADMIN_KEY，再生成编号。';return;}
+  $('codeStatus').textContent='正在生成编号...';
+  try{
+    const section=encodeURIComponent($('section').value);
+    const res=await fetch(WORKER_API+'/api/admin/next-code?section='+section,{headers:{'X-Admin-Key':key},cache:'no-store'});
+    const data=await res.json().catch(()=>({ok:false,error:'返回不是 JSON'}));
+    if(!res.ok||!data.ok) throw new Error(data.error||('HTTP '+res.status));
+    if(force||autoCode||!$('code').value.trim()){
+      $('code').value=data.code;
+      autoCode=true;
+      $('codeStatus').innerHTML='<span class="ok">已生成：</span>'+data.code;
+      if($('files').files.length){processed=[];$('imageList').innerHTML='';$('imageStatus').textContent='编号已变化，请重新压缩生成文件名。';}
+    }
+  }catch(err){$('codeStatus').innerHTML='<span class="bad">编号生成失败：</span>'+escapeHtml(err.message||String(err));}
+  updateSummary();
+}
+async function processImages(){
+  const files=Array.from($('files').files||[]);
+  const code=cleanCode($('code').value.trim());
+  if(!code){alert('请先填写或生成商品编号');return;}
+  if(!files.length){alert('请先选择图片');return;}
+  if(files.length>6){alert('最多选择 6 张图片');return;}
+  $('processBtn').disabled=true;
+  $('imageStatus').textContent='正在压缩 0 / '+files.length+' ...';
+  $('imageList').innerHTML='';processed=[];
+  const maxSide=Number($('maxSide').value)||900;
+  const quality=Number($('quality').value)||0.72;
+  try{
+    for(let i=0;i<files.length;i++){
+      const name=code+'-'+(i+1)+'.jpg';
+      const r=await compressFile(files[i],name,maxSide,quality);
+      processed.push(r);
+      addImageCard(r,i+1);
+      $('imageStatus').textContent='正在压缩 '+(i+1)+' / '+files.length+' ...';
+    }
+    const before=processed.reduce((n,r)=>n+r.before,0), after=processed.reduce((n,r)=>n+r.after,0);
+    $('imageStatus').innerHTML='<span class="ok">压缩完成：</span>'+processed.length+' 张，'+formatSize(before)+' → '+formatSize(after);
+  }catch(err){$('imageStatus').innerHTML='<span class="bad">压缩失败：</span>'+escapeHtml(err.message||String(err));}
+  $('processBtn').disabled=false;
+  updateSummary();
+}
+async function saveProduct(){
+  const key=$('adminKey').value.trim();
+  const code=cleanCode($('code').value.trim());
+  const product={
+    id:code,
+    code,
+    style:$('style').value.trim(),
+    section:$('section').value,
+    price:$('price').value,
+    color:$('color').value.trim(),
+    size:$('size').value.trim(),
+    material:$('material').value.trim(),
+    note:$('note').value.trim(),
+    sort_order:Date.now()
+  };
+  if(!key){alert('请先输入 ADMIN_KEY');return;}
+  if(!product.code){alert('请先填写商品编号');return;}
+  if(!product.style){alert('请先填写款式名称');return;}
+  if(!processed.length){alert('请先压缩图片');return;}
+  if(!confirm('确认上传图片并保存商品：'+product.code+'？'))return;
+  $('saveBtn').disabled=true;setProgress(15);$('saveStatus').textContent='正在提交到 Worker...';$('resultLinks').innerHTML='';
+  try{
+    const files=processed.map(r=>({name:r.name,contentBase64:r.base64}));
+    const res=await fetch(WORKER_API+'/api/admin/upload-product',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':key},body:JSON.stringify({product,files}),cache:'no-store'});
+    setProgress(70);
+    const data=await res.json().catch(()=>({ok:false,error:'接口返回不是 JSON'}));
+    if(!res.ok||!data.ok) throw new Error(data.error||('HTTP '+res.status));
+    setProgress(100);
+    $('saveStatus').innerHTML='<span class="ok">保存成功：</span>图片已上传 GitHub，商品已保存。Cloudflare Pages 可能需要 1–2 分钟部署图片。';
+    const front=FRONT_URL+'?v='+encodeURIComponent(product.code+'-'+Date.now());
+    const links=(data.images||[]).map(p=>'https://style-catalog-v2.pages.dev'+p+'?v='+Date.now()).join('\n');
+    $('resultLinks').innerHTML='<div class="linkbox"><b>前台测试链接：</b><br>'+front+'</div><div class="linkbox"><b>图片路径：</b><br>'+escapeHtml((data.images||[]).join('\n'))+'</div>';
+    autoCode=true;
+  }catch(err){setProgress(0);$('saveStatus').innerHTML='<span class="bad">保存失败：</span>'+escapeHtml(err.message||String(err));}
+  $('saveBtn').disabled=false;
+}
+async function compressFile(file,name,maxSide,quality){
+  const src=await readFile(file);
+  const img=await loadImage(src);
+  const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+  const w=Math.max(1,Math.round(img.width*scale));
+  const h=Math.max(1,Math.round(img.height*scale));
+  const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',quality));
+  const dataUrl=await blobToDataUrl(blob);
+  return {name,url:URL.createObjectURL(blob),base64:dataUrl.split(',')[1],before:file.size,after:blob.size,w,h};
+}
+function addImageCard(r,index){
+  const div=document.createElement('div');div.className='img-card';
+  div.innerHTML='<img src="'+r.url+'" alt="预览"><div class="meta"><b>'+index+'. '+escapeHtml(r.name)+'</b><div class="small">'+formatSize(r.before)+' → '+formatSize(r.after)+'<br>'+r.w+'×'+r.h+'<br>/images/products/'+escapeHtml(r.name)+'</div></div>';
+  $('imageList').appendChild(div);
+}
+function updateSummary(){
+  const code=$('code').value.trim()||'未生成编号';
+  const style=$('style').value.trim()||'未填款式';
+  $('summaryText').textContent='当前：'+code+'｜'+$('section').value+'｜'+$('price').value+'｜'+style+'｜图片 '+processed.length+' 张';
+}
+function setProgress(n){$('bar').style.width=Math.max(0,Math.min(100,n))+'%';}
+function makeChips(id,arr,cb){
+  const box=$(id);box.innerHTML='';
+  arr.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t;b.onclick=()=>cb(t);box.appendChild(b);});
+}
+function appendToInput(id,text){const el=$(id);const v=el.value.trim();el.value=v?(v+text):text;updateSummary();}
+function setOrAppend(id,text){const el=$(id);const v=el.value.trim();el.value=v?(v+' / '+text):text;updateSummary();}
+function cleanCode(s){return String(s||'').trim().replace(/\s+/g,'-').replace(/[^A-Za-z0-9_-]/g,'').replace(/-+/g,'-');}
+function readFile(f){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(f);});}
+function loadImage(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src;});}
+function blobToDataUrl(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(blob);});}
+function formatSize(n){if(!n&&n!==0)return '';if(n<1024)return n+' B';if(n<1024*1024)return Math.round(n/1024)+' KB';return (n/1024/1024).toFixed(2)+' MB';}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+</script>
+</body>
+</html>
