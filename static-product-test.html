@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>静态图片速度测试</title>
+  <style>
+    body{margin:0;background:#fbfaf7;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}
+    .page{max-width:980px;margin:0 auto;padding:22px 16px 60px}.top{display:flex;gap:12px;align-items:center;border-bottom:1px solid #e6e1d8;padding-bottom:18px}.mark{width:42px;height:42px;border:2px solid #111;border-radius:999px;display:grid;place-items:center;font-weight:800}.top h1{margin:0;font-size:24px}.top p{margin:3px 0 0;color:#74706a}.notice{margin:18px 0;background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:14px;color:#74706a;line-height:1.7}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:#fff;border:1px solid #e6e1d8;border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(20,20,20,.05)}.media{height:300px;background:#f4f1eb}.media img{width:100%;height:100%;object-fit:cover;display:block}.body{padding:14px}.body b{display:block;font-size:18px;margin-bottom:6px}.body span{color:#74706a;font-size:13px;word-break:break-all}
+    @media(max-width:620px){.page{padding:18px 14px 58px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.media{height:150px}.body{padding:9px}.body b{font-size:15px}.body span{font-size:11px}.top h1{font-size:23px}}
+    @media(max-width:390px){.media{height:132px}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top"><div class="mark">PF</div><div><h1>静态图片速度测试</h1><p>只加载 GitHub / Pages 静态图片，不读取 D1 旧商品。</p></div></header>
+    <div class="notice">如果这个页面 3 张图能快速显示，说明方案 B 静态图片路线可行。这个页面不会显示 D1 里的旧商品。</div>
+    <section class="grid">
+      <article class="card"><div class="media"><img src="/images/products/ChatGPT 图片 2026年6月12日 02_57_55.png?v=1" alt="测试图1"></div><div class="body"><b>测试图 1</b><span>ChatGPT 图片 2026年6月12日 02_57_55.png</span></div></article>
+      <article class="card"><div class="media"><img src="/images/products/ChatGPT 图片 2026年6月12日 02_59_11.png?v=1" alt="测试图2"></div><div class="body"><b>测试图 2</b><span>ChatGPT 图片 2026年6月12日 02_59_11.png</span></div></article>
+      <article class="card"><div class="media"><img src="/images/products/ChatGPT 图片 2026年6月12日 03_13_46.png?v=1" alt="测试图3"></div><div class="body"><b>测试图 3</b><span>ChatGPT 图片 2026年6月12日 03_13_46.png</span></div></article>
+    </section>
+  </main>
+</body>
+</html>
