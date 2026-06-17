@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>静态图片商品写入测试</title>
+  <style>
+    body{margin:0;padding:18px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;background:#fbfaf7;color:#171717}
+    h1{font-size:22px;margin:0 0 10px}.muted{color:#777;font-size:13px;line-height:1.7}.box{background:#fff;border:1px solid #e6e1d8;border-radius:18px;padding:14px;margin:14px 0}.warn{background:#fff7ed;border-color:#fed7aa;color:#8a4b0a}.field{margin:12px 0}.field label{display:block;font-size:13px;color:#666;margin-bottom:6px}.field input{width:100%;box-sizing:border-box;border:1px solid #e6e1d8;border-radius:14px;background:#fff;padding:12px;font:inherit}.btn{width:100%;border:0;border-radius:999px;background:#111;color:#fff;padding:14px;font-weight:700;font:inherit;margin-top:10px}.btn:disabled{opacity:.45}.ok{color:#0a7a32}.bad{color:#9a312d}.preview img{max-width:100%;border-radius:14px;border:1px solid #eee;background:#f4f1eb}.small{font-size:12px;color:#777;line-height:1.6;word-break:break-all}
+  </style>
+</head>
+<body>
+  <h1>静态图片商品写入测试</h1>
+  <p class="muted">这个页面用于把 D1 里的旧 base64 测试商品替换成一个“静态图片路径商品”。</p>
+  <div class="box warn"><b>注意：</b>点击保存后，会清空当前 D1 商品列表，只保留这个静态图片测试商品。测试通过后，正式商品也会用这种方式保存图片路径。</div>
+  <div class="box">
+    <div class="field"><label>ADMIN_KEY</label><input id="key" type="password" placeholder="输入后台密钥"></div>
+    <div class="field"><label>图片路径</label><input id="img" value="/images/products/PF-TEST-001-1.png.png"></div>
+    <div class="small">当前测试商品：PF-STATIC-001 / 静态图片测试款 / ¥189</div>
+    <div class="preview" style="margin-top:12px"><img id="preview" src="/images/products/PF-TEST-001-1.png.png" alt="静态图片预览"></div>
+    <button class="btn" id="save">清空旧测试商品，并保存静态图片测试商品</button>
+    <div class="small" id="result"></div>
+  </div>
+<script>
+const $=id=>document.getElementById(id);
+$('img').addEventListener('input',()=>{$('preview').src=$('img').value.trim()||'';});
+$('save').onclick=async()=>{
+  const key=$('key').value.trim();
+  const img=$('img').value.trim();
+  if(!key){alert('请先输入 ADMIN_KEY');return;}
+  if(!img){alert('请填写图片路径');return;}
+  if(!confirm('确认清空当前 D1 商品列表，只保存这个静态图片测试商品吗？'))return;
+  $('save').disabled=true;$('result').textContent='正在保存...';
+  const product={
+    id:'static-test-001',
+    code:'PF-STATIC-001',
+    style:'静态图片测试款',
+    section:'新品上新',
+    price:'¥189',
+    color:'测试配色',
+    size:'S / M / L / XL',
+    material:'聚酯纤维速干运动面料',
+    note:'这个商品使用 GitHub / Cloudflare Pages 静态图片路径，不再使用 D1 base64 图片。',
+    images:[img],
+    sort_order:1
+  };
+  try{
+    const res=await fetch('/api/admin/products',{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Key':key},body:JSON.stringify({products:[product]}),cache:'no-store'});
+    const data=await res.json().catch(()=>({ok:false,error:'接口返回不是 JSON'}));
+    if(!res.ok||data.ok===false)throw new Error(data.error||('请求失败 '+res.status));
+    $('result').innerHTML='<b class="ok">保存成功。</b>现在打开正式首页测试速度。';
+  }catch(err){
+    $('result').innerHTML='<b class="bad">保存失败：</b>'+escapeHtml(err.message||String(err));
+  }finally{$('save').disabled=false;}
+};
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+</script>
+</body>
+</html>
