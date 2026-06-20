@@ -6,305 +6,51 @@
   <meta name="robots" content="noindex,nofollow" />
   <title>球衣款式图册</title>
   <style>
-    :root{--bg:#fbfaf7;--card:#fff;--ink:#171717;--muted:#74706a;--line:#e6e1d8;--soft:#f4f1eb;--soft2:#faf7f1;--radius:22px;--shadow:0 18px 50px rgba(20,20,20,.07);--accent:#8a4a35}
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:var(--bg);color:var(--ink);letter-spacing:.01em} button{font-family:inherit;cursor:pointer;color:inherit}
-    .gate{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--bg)} .gate-card{width:min(440px,100%);background:#fff;border:1px solid var(--line);border-radius:28px;padding:34px;box-shadow:var(--shadow)} .gate-card h1{margin:0 0 8px;font-size:28px;letter-spacing:-.04em} .gate-card p{margin:0 0 22px;color:var(--muted);line-height:1.7;font-size:14px} .gate-row{display:flex;gap:10px} .gate input{flex:1;border:1px solid var(--line);border-radius:999px;padding:13px 16px;font-size:15px;outline:none;background:#fff} .gate button,.primary{border:0;background:var(--ink);color:#fff;border-radius:999px;padding:13px 18px;font-weight:700} .gate-error{min-height:20px;color:#9a312d;font-size:13px;margin-top:12px}
-    .app{display:block} .page{max-width:1220px;margin:0 auto;padding:24px 20px 86px} .topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 0 26px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(251,250,247,.9);backdrop-filter:blur(16px);z-index:10} .brand{display:flex;gap:12px;align-items:center;min-width:0} .mark{width:38px;height:38px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-size:12px;font-weight:780;flex:none;letter-spacing:-.03em} .brand h1{font-size:18px;margin:0;font-weight:780;line-height:1.1;letter-spacing:-.02em} .brand p{font-size:12px;margin:3px 0 0;color:var(--muted)} .nav{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px;white-space:nowrap} .pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.55)}
-    .hero{display:grid;grid-template-columns:1.12fr .88fr;gap:30px;padding:54px 0 36px;align-items:end} .eyebrow{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:0 0 15px} .hero h2{font-size:54px;line-height:1.02;margin:0 0 18px;letter-spacing:-.055em;font-weight:840} .hero p{font-size:16px;line-height:1.8;color:var(--muted);max-width:690px;margin:0} .hero-note{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)} .hero-note b{display:block;font-size:14px;margin-bottom:10px} .hero-note p{font-size:13px;line-height:1.75;margin:0;color:var(--muted)} .hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px} .stat{background:var(--soft2);border:1px solid var(--line);border-radius:16px;padding:14px} .stat b{font-size:20px;margin:0 0 3px;display:block} .stat span{font-size:12px;color:var(--muted)} .notice{margin:4px 0 24px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;color:var(--muted);font-size:13px;line-height:1.75}
-    .toolbar{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin:26px 0 20px} .searchbox{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:13px 16px;box-shadow:0 8px 20px rgba(20,20,20,.035)} .searchbox span{color:var(--muted)} .searchbox input{border:0;outline:0;background:transparent;width:100%;font-size:15px;color:var(--ink)} .top-home-btn{display:none}.filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end} .filter-btn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:12px 14px;font-size:13px;color:var(--muted)} .filter-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)} .promo-strip{margin:14px 0 22px;padding:11px 14px;border:1px solid var(--line);background:rgba(255,255,255,.76);border-radius:16px;color:#5f5850;font-size:13px;line-height:1.55}
-    .catalog-sections{display:flex;flex-direction:column;gap:46px}.collection-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:4px 0 18px;padding-top:10px}.collection-head h3{font-size:26px;line-height:1.1;margin:0;letter-spacing:-.04em}.collection-head p{margin:6px 0 0;color:var(--muted);font-size:13px}.price-badge{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;color:var(--muted);white-space:nowrap}.section-link{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:760;color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.035);cursor:pointer;white-space:nowrap}.section-link:hover{border-color:#cfc7bc;box-shadow:0 12px 30px rgba(0,0,0,.06)}.collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px} .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 26px rgba(20,20,20,.035);transition:transform .18s ease,box-shadow .18s ease;cursor:pointer} .card:hover{transform:translateY(-2px);box-shadow:var(--shadow)} .media{height:386px;background:var(--soft);position:relative;overflow:hidden;cursor:pointer} .media img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,center center);display:block} .placeholder{height:100%;display:grid;place-items:center;border:1px dashed #d2cabf;margin:28px;border-radius:22px;color:var(--muted);font-size:13px;background:linear-gradient(180deg,#fbfaf7,#f7f3eb)}
-    .body{padding:18px} .meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;letter-spacing:.08em;margin-bottom:14px} .status{letter-spacing:0;padding:6px 9px;border-radius:999px;background:var(--soft);color:var(--muted);font-size:12px} .title{font-size:22px;font-weight:840;letter-spacing:-.035em;line-height:1.2;margin:0 0 10px} .price{font-size:22px;font-weight:840;margin:0 0 14px;color:var(--accent)} .price small{font-size:12px;color:var(--muted);font-weight:500;margin-left:4px} .specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}.specs.compact{grid-template-columns:1fr;gap:6px} .spec{background:var(--soft2);border-radius:12px;padding:11px 12px;min-height:48px}.specs.compact .spec{background:transparent;border-radius:0;padding:0;min-height:auto;display:flex;gap:6px;align-items:flex-start} .spec b{display:block;font-size:12px;margin-bottom:3px}.specs.compact .spec b{margin:0;color:var(--ink);white-space:nowrap} .spec span{font-size:13px;color:var(--muted);line-height:1.3} .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px} .btn{border:1px solid var(--ink);background:#fff;border-radius:999px;padding:13px 12px;font-weight:760;font-size:14px} .btn.primary{background:var(--ink);color:#fff}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:40;padding:28px;overflow:auto} .modal.open{display:block} .modal-panel{max-width:1180px;margin:0 auto;background:#fff;border-radius:28px;overflow:hidden;display:grid;grid-template-columns:.95fr 1.05fr;box-shadow:0 30px 80px rgba(0,0,0,.25);min-height:720px} .modal-media{background:var(--soft);padding:28px;display:flex;flex-direction:column;gap:14px} .main-img-wrap{border:1px dashed #d2cabf;border-radius:22px;overflow:hidden;background:#fbfaf7;display:grid;place-items:center;min-height:570px;position:relative} .main-img-wrap img{width:100%;height:100%;max-height:570px;object-fit:contain;object-position:center center;display:block} .gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:78px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.84);backdrop-filter:blur(8px);border-radius:999px;color:#111;font-size:36px;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.12);z-index:2;transition:.16s} .gallery-arrow:hover{background:#fff;transform:translateY(-50%) scale(1.03)} .gallery-arrow.prev{left:14px}.gallery-arrow.next{right:14px}.gallery-arrow:disabled{opacity:.35;cursor:default} .thumbs{display:flex;gap:10px;overflow:auto;padding-bottom:2px} .thumb{width:82px;height:82px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;flex:none;padding:0} .thumb.active{border-color:var(--ink);box-shadow:0 0 0 2px rgba(0,0,0,.12)} .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .modal-info{padding:44px 42px;position:relative;overflow:auto} .close{position:absolute;right:28px;top:28px;border:1px solid var(--line);background:#fff;border-radius:50%;width:42px;height:42px;font-size:18px} .modal-info .code{font-size:12px;color:var(--muted);letter-spacing:.1em;margin-bottom:24px} .modal-info h3{font-size:42px;line-height:1.06;margin:0 56px 8px 0;letter-spacing:-.055em} .modal-info .desc{color:var(--muted);line-height:1.8;font-size:15px;margin:20px 0 34px} .details{border-top:1px solid var(--line);margin-bottom:28px} .detail-row{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:15px 0;border-bottom:1px solid var(--line);font-size:15px} .detail-row span:first-child{color:var(--muted)} .detail-row b{justify-self:end;text-align:right} .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px} .hint{margin-top:14px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--muted);font-size:13px;line-height:1.7} .copy-note{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--soft);color:var(--muted);font-size:13px} .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#111;color:#fff;padding:12px 16px;border-radius:999px;font-size:14px;display:none;z-index:60} .toast.show{display:block}
-    @media(max-width:900px){.collection-grid{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr;padding-top:34px}.hero h2{font-size:42px}.toolbar{grid-template-columns:1fr}.filters{justify-content:flex-start}.grid{grid-template-columns:1fr 1fr}.modal-panel{grid-template-columns:1fr}.modal-info h3{font-size:34px}.modal-info{padding:34px 24px}} @media(max-width:620px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.page{padding:18px 14px 70px}.nav{display:none}.hero h2{font-size:36px}.grid{grid-template-columns:1fr}.media{height:410px}.modal{padding:0}.modal-panel{border-radius:0;min-height:100vh}.modal-media{padding:18px}.main-img-wrap{min-height:430px}.gallery-arrow{width:40px;height:64px;font-size:30px}.gallery-arrow.prev{left:10px}.gallery-arrow.next{right:10px}.modal-actions,.actions{grid-template-columns:1fr}}
-
-    .hero{display:block;max-width:760px;padding:52px 0 30px}
-    .hero p{max-width:720px}
-    .hero h2{font-size:52px}
-    .modal-actions{grid-template-columns:1fr 1fr 1fr}
-    .topbar .nav .pill{background:#fff}
-
-    .nav-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:760;color:var(--ink);cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.04)}
-    .nav-btn.subtle{color:var(--muted);font-weight:650}
-    .resultbar{display:none;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--muted);font-size:14px}
-    .resultbar.show{display:flex}
-    .resultbar button{border:1px solid var(--ink);background:#fff;border-radius:999px;padding:8px 12px;font-weight:760;cursor:pointer;white-space:nowrap}
-    .back-link{border:0;background:transparent;padding:0 0 18px;color:var(--muted);font-weight:760;cursor:pointer;font-size:14px;text-align:left}
-    .back-link:hover{color:var(--ink)}
-    .main-img-wrap img{cursor:zoom-in}
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.86);z-index:80;display:none;align-items:center;justify-content:center;padding:24px}
-    .lightbox.open{display:flex}
-    .lightbox img{max-width:96vw;max-height:90vh;object-fit:contain;border-radius:18px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.35)}
-    .lightbox-close{position:fixed;right:22px;top:18px;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;font-size:28px;line-height:1;cursor:pointer}
-    .lightbox-arrow{position:fixed;top:50%;transform:translateY(-50%);width:52px;height:78px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.13);color:#fff;border-radius:999px;font-size:42px;line-height:1;display:grid;place-items:center;cursor:pointer}
-    .lightbox-arrow.prev{left:22px}.lightbox-arrow.next{right:22px}
-    .lightbox-tip{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);color:rgba(255,255,255,.72);font-size:13px}
-    @media(max-width:620px){.topbar{align-items:flex-start}.nav{display:flex;width:100%;margin-top:14px}.nav-btn{flex:1}.resultbar{align-items:flex-start;flex-direction:column}.lightbox{padding:8px}.lightbox img{max-width:100vw;max-height:86vh;border-radius:10px}.lightbox-arrow{width:42px;height:64px;font-size:34px}.lightbox-arrow.prev{left:10px}.lightbox-arrow.next{right:10px}.lightbox-close{right:12px;top:12px}}
-
-
-    /* V4.16 mobile catalog optimization: two-column, Xiaohongshu-like browsing */
-    @media(max-width:620px){
-      .page{padding:14px 12px 58px;}
-      .topbar{padding:12px 0 12px;gap:12px;flex-wrap:wrap;align-items:flex-start;}
-      .brand{width:100%;gap:10px;}
-      .mark{width:34px;height:34px;font-size:12px;}
-      .brand h1{font-size:17px;}
-      .brand p{font-size:11px;margin-top:2px;}
-      .nav{display:flex;width:100%;gap:8px;margin-top:0;}
-      .nav-btn{flex:1;padding:9px 10px;font-size:13px;box-shadow:0 6px 16px rgba(0,0,0,.035);}
-      .hero{display:none;}
-      .toolbar{display:block;margin:14px 0 14px;}
-      .searchbox{padding:11px 14px;border-radius:18px;box-shadow:none;}
-      .searchbox input{font-size:14px;}
-      .filters{display:none;}
-      .resultbar{margin:0 0 12px;padding:10px 12px;border-radius:14px;font-size:13px;}
-      .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start;}
-      .card{border-radius:18px;box-shadow:0 6px 18px rgba(20,20,20,.035);}
-      .media{height:236px;}
-      .body{padding:12px;}
-      .meta{font-size:10px;letter-spacing:.055em;margin-bottom:9px;}
-      .title{font-size:17px;line-height:1.22;margin-bottom:8px;letter-spacing:-.03em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-      .price{font-size:20px;margin-bottom:10px;}
-      .specs.compact{gap:4px;margin-bottom:12px;}
-      .specs.compact .spec{font-size:12px;line-height:1.45;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-      .specs.compact .spec b{display:inline;font-size:12px;margin-right:4px;}
-      .actions{grid-template-columns:1fr;gap:8px;}
-      .card .actions .btn{padding:10px 8px;font-size:13px;}
-      .card .actions .btn:not(.primary){display:none;}
-      .modal-actions{grid-template-columns:1fr;gap:10px;}
-
-      .section-page-head{padding:14px 14px;border-radius:18px;margin:4px 0 14px;align-items:flex-start;}
-      .section-page-head h3{font-size:24px;}
-      .section-page-head .section-link{padding:8px 11px;font-size:12px;}
-      .collection-head h3{font-size:22px;}
-      .collection-head p{font-size:12px;}
-      .section-link{padding:7px 11px;font-size:12px;}
-    }
-
-    @media(max-width:390px){
-      .media{height:212px;}
-      .title{font-size:16px;}
-      .body{padding:10px;}
-      .price{font-size:18px;}
-    }
-
-    /* V4.19: 新品上新首页仅展示 4 款；手机端统一两列，保持图册成熟感 */
-    .collection.new-section .collection-grid{grid-template-columns:repeat(4,1fr);}
-    @media(max-width:620px){
-      .catalog-sections{gap:34px;}
-      .collection-head{margin-bottom:12px;padding-top:6px;}
-      .section-link{border:1px solid var(--line);background:#fff;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.035);}
-      .collection.new-section .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
-      .collection.new-section .media{height:150px;}
-      .collection.new-section .body{padding:8px;}
-      .collection.new-section .title{font-size:13px;line-height:1.25;min-height:32px;margin-bottom:6px;}
-      .collection.new-section .price{font-size:16px;margin-bottom:0;}
-      .collection.new-section .meta{font-size:10px;margin-bottom:5px;}
-      .collection.new-section .specs,.collection.new-section .actions{display:none;}
-    }
-    @media(max-width:390px){
-      .collection.new-section .media{height:132px;}
-      .collection.new-section .title{font-size:12px;}
-      .collection.new-section .price{font-size:15px;}
-    }
-
-    /* V4.20: 修复正式前台手机端横向溢出，保证商品详情居中显示 */
-    html,body{width:100%;max-width:100%;overflow-x:hidden;}
-    img{max-width:100%;}
-    @media(max-width:620px){
-      .app,.page,.catalog-sections,.catalog-section-page,.grid,.collection-grid,.collection{width:100%;max-width:100%;min-width:0;overflow-x:hidden;}
-      .page{margin-left:auto;margin-right:auto;}
-      .card,.body,.media{min-width:0;}
-      .modal{left:0;right:0;width:100vw;max-width:100vw;padding:0;overflow-x:hidden;}
-      .modal-panel{width:100vw;max-width:100vw;margin:0;border-radius:0;display:block;overflow-x:hidden;box-shadow:none;}
-      .modal-media,.modal-info{width:100%;max-width:100%;min-width:0;overflow-x:hidden;}
-      .modal-media{padding:14px 12px;}
-      .main-img-wrap{width:100%;max-width:100%;min-width:0;min-height:auto;height:auto;display:flex;align-items:center;justify-content:center;}
-      .main-img-wrap img{display:block;width:100%;height:auto;max-width:100%;max-height:72vh;object-fit:contain;object-position:center center;margin:0 auto;}
-      .thumbs{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;}
-      .modal-info{padding:22px 16px 34px;}
-      .modal-info h3{margin-right:52px;word-break:break-word;}
-      .details,.detail-row,.modal-actions{width:100%;max-width:100%;min-width:0;}
-    }
-
-    /* V4.24: 首页搜索、分区返首、底部查看更多引导 */
-    @media(max-width:620px){
-      .page{padding:12px 7px 56px;}
-      .topbar{padding:10px 0 10px;border-bottom:1px solid rgba(230,225,216,.78);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;}
-      .topbar .nav{display:none;}
-      .brand{width:auto;flex:1;min-width:0;align-items:center;gap:8px;}
-      .brand>div:last-child{min-width:0;}
-      .brand h1,.brand p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-      .mark{width:38px;height:32px;border-radius:999px;font-size:12px;border-color:#2a2927;}
-      .brand h1{font-size:17px;letter-spacing:-.035em;}
-      .brand p{font-size:11px;color:#8a847b;}
-      .top-search{display:flex;width:38px;height:34px;padding:0;justify-content:center;gap:6px;flex:none;border-radius:999px;background:#fff;transition:width .18s ease, padding .18s ease;box-shadow:none;}
-      .top-search span{font-size:15px;line-height:1;}
-      .top-search input{width:0;opacity:0;font-size:13px;transition:opacity .12s ease,width .18s ease;}
-      .top-search:focus-within{width:152px;padding:0 10px;justify-content:flex-start;}
-      .top-search:focus-within input{width:100%;opacity:1;}
-      .top-home-btn{display:none;align-items:center;justify-content:center;flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;height:34px;padding:0 12px;font-size:12px;font-weight:760;color:#2a2927;}
-      body.section-mode .top-search{display:none;}
-      body.section-mode .top-home-btn{display:flex;}
-      .toolbar{display:none;}
-      .hero{display:none;}
-      .promo-strip{margin:9px 0 16px;padding:10px 12px;border-radius:14px;font-size:12.5px;line-height:1.5;background:#fff;border-color:#ece4da;}
-      .catalog-sections{gap:22px;}
-      .collection{padding-top:17px;border-top:1px solid #e5ded4;}
-      .catalog-sections .collection:first-child{padding-top:0;border-top:0;}
-      .collection-head{align-items:center;margin:0 0 8px;padding-top:0;}
-      .collection-head h3{font-size:20px;letter-spacing:-.035em;display:flex;align-items:center;gap:7px;}
-      .collection-head h3:before{content:"";width:4px;height:17px;border-radius:99px;background:#2a2927;display:block;}
-      .collection-head p{display:none;}
-      .section-link{padding:7px 12px;font-size:12px;box-shadow:none;background:#171717;color:#fff;border-color:#171717;}
-      .section-more{margin-top:8px;display:flex;justify-content:center;align-items:center;width:100%;border:1px solid #171717;background:#171717;color:#fff;border-radius:999px;height:38px;font-size:13px;font-weight:780;letter-spacing:-.01em;}
-      .grid,.collection-grid,.collection.new-section .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;}
-      .catalog-section-page{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%;max-width:100%;overflow-x:hidden;}
-      .card{border-radius:14px;border-color:#eee7dd;box-shadow:0 4px 12px rgba(35,32,28,.03);}
-      .media,.collection.new-section .media{height:auto;aspect-ratio:3/4;background:#f3efe7;}
-      .media img,.collection.new-section .media img{width:100%;height:100%;object-fit:cover;}
-      .body,.collection.new-section .body{padding:8px 8px 9px;}
-      .meta,.collection.new-section .meta{font-size:9.5px;letter-spacing:.045em;margin-bottom:5px;color:#918a80;}
-      .title,.collection.new-section .title{font-size:15px;line-height:1.22;min-height:36px;margin-bottom:5px;font-weight:800;letter-spacing:-.035em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-      .price,.collection.new-section .price{font-size:17px;line-height:1.1;margin:0;color:var(--accent);font-weight:850;}
-      .specs.compact,.collection.new-section .specs{display:none;}
-      .actions,.card .actions,.collection.new-section .actions{display:none;}
-      .section-page-head{display:none;}
-      body.section-mode .resultbar{display:none!important;}
-      .modal-media{padding:12px 10px 10px;background:#f3efe7;}
-      .main-img-wrap{border-radius:18px;border:1px solid #e5ded4;background:#fbfaf7;}
-      .thumbs{gap:8px;padding:2px 0 0;}
-      .thumb{width:66px;height:66px;border-radius:12px;border-color:#e8e0d6;padding:1px;}
-      .thumb img{border-radius:10px;}
-      .thumb.active{border-color:#2a2927;box-shadow:0 0 0 2px rgba(42,41,39,.12);}
-      .modal-info{padding:20px 15px 32px;background:#fff;}
-      .modal-info .code{margin-bottom:12px;font-size:11px;}
-      .modal-info h3{font-size:25px;line-height:1.12;margin:0 48px 8px 0;}
-      .modal-info .price{font-size:24px;color:var(--accent);margin-bottom:14px;}
-      .modal-info .desc{font-size:13px;line-height:1.65;margin:12px 0 18px;}
-      .detail-row{grid-template-columns:78px 1fr;gap:10px;padding:12px 0;font-size:13px;}
-      .modal-actions{grid-template-columns:1fr;gap:9px;}
-      .modal-actions .btn{border-radius:16px;padding:12px 10px;}
-      .modal-actions .btn.primary{padding:13px 10px;}
-      .back-link{font-size:13px;padding-bottom:12px;}
-    }
-
+    :root{--bg:#fbfaf7;--card:#fff;--ink:#171717;--muted:#7a746b;--line:#e7e0d6;--soft:#f3efe7;--accent:#8a4a35;--shadow:0 8px 24px rgba(30,26,22,.045)}
+    *{box-sizing:border-box}html,body{width:100%;max-width:100%;overflow-x:hidden}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;letter-spacing:.01em}button,input{font-family:inherit;color:inherit}button{cursor:pointer}img{max-width:100%;display:block}
+    .page{max-width:1220px;margin:0 auto;padding:22px 18px 80px}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid rgba(231,224,214,.82);background:rgba(251,250,247,.94);backdrop-filter:blur(14px)}.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}.mark{width:38px;height:32px;border:1px solid #25231f;border-radius:999px;display:grid;place-items:center;font-size:12px;font-weight:800;letter-spacing:-.03em;flex:none}.brand-text{min-width:0}.brand h1{margin:0;font-size:18px;line-height:1.1;font-weight:840;letter-spacing:-.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand p{margin:3px 0 0;font-size:12px;line-height:1.1;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.searchbox{height:36px;width:42px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 5px 16px rgba(30,26,22,.035);transition:width .18s ease,padding .18s ease}.searchbox span{font-size:15px;color:#4c4741}.searchbox input{width:0;opacity:0;border:0;outline:0;background:transparent;font-size:13px;transition:width .18s ease,opacity .12s ease}.searchbox:focus-within{width:152px;padding:0 10px;justify-content:flex-start}.searchbox:focus-within input{width:100%;opacity:1}.home-btn{display:none;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px;font-weight:760}.promo{margin:12px 0 17px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.82);font-size:12.5px;line-height:1.55;color:#5e574e}.notice{margin:12px 0;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fff;color:var(--muted);font-size:13px;line-height:1.7}.resultbar{display:none;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--muted);font-size:13px;line-height:1.5}.resultbar.show{display:flex;align-items:center;justify-content:space-between;gap:10px}.resultbar button{border:1px solid var(--ink);border-radius:999px;background:#fff;padding:7px 10px;font-weight:760;white-space:nowrap}
+    .catalog-sections{display:flex;flex-direction:column;gap:22px}.collection{padding-top:17px;border-top:1px solid var(--line)}.collection:first-child{padding-top:0;border-top:0}.collection-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}.collection-head h3{margin:0;display:flex;align-items:center;gap:7px;font-size:20px;line-height:1.1;font-weight:850;letter-spacing:-.04em}.collection-head h3:before{content:"";width:4px;height:17px;border-radius:999px;background:#24221f;display:block;flex:none}.section-link{height:32px;padding:0 13px;border:1px solid #171717;border-radius:999px;background:#171717;color:#fff;font-size:12px;font-weight:800;white-space:nowrap}.grid,.collection-grid,.section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.card{overflow:hidden;border:1px solid #eee7dd;border-radius:14px;background:#fff;box-shadow:0 4px 12px rgba(35,32,28,.03)}.media{position:relative;overflow:hidden;aspect-ratio:3/4;background:var(--soft)}.media img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,center center)}.placeholder{height:100%;display:grid;place-items:center;color:var(--muted);font-size:12px;background:linear-gradient(180deg,#fbfaf7,#f5f0e8)}.body{padding:8px 8px 9px}.meta{margin-bottom:5px;color:#918a80;font-size:9.5px;letter-spacing:.045em}.title{margin:0 0 5px;font-size:15px;line-height:1.22;min-height:36px;font-weight:820;letter-spacing:-.035em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.price{margin:0;color:var(--accent);font-size:17px;line-height:1.1;font-weight:850}.specs,.actions{display:none}
+    .modal{position:fixed;inset:0;display:none;z-index:50;background:rgba(0,0,0,.45);overflow:auto}.modal.open{display:block}.modal-panel{width:100vw;min-height:100vh;background:#fff;overflow:hidden}.modal-media{background:var(--soft);padding:12px 10px 10px}.main-img-wrap{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:auto;border:1px solid #e5ded4;border-radius:18px;background:#fbfaf7;overflow:hidden}.main-img-wrap img{width:100%;height:auto;max-height:72vh;object-fit:contain;object-position:center center;cursor:zoom-in}.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:64px;border:1px solid rgba(255,255,255,.9);border-radius:999px;background:rgba(255,255,255,.84);font-size:30px;line-height:1;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.12)}.gallery-arrow.prev{left:10px}.gallery-arrow.next{right:10px}.thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px 0 0}.thumb{width:66px;height:66px;padding:1px;border:1px solid #e8e0d6;border-radius:12px;background:#fff;overflow:hidden;flex:none}.thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px}.thumb.active{border-color:#2a2927;box-shadow:0 0 0 2px rgba(42,41,39,.12)}.modal-info{position:relative;padding:20px 15px 32px;background:#fff}.close{position:absolute;right:14px;top:14px;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:20px}.back-link{border:0;background:transparent;padding:0 0 12px;color:var(--muted);font-size:13px;font-weight:760}.modal-info .code{margin-bottom:12px;color:var(--muted);font-size:11px;letter-spacing:.1em}.modal-info h3{margin:0 48px 8px 0;font-size:25px;line-height:1.12;letter-spacing:-.05em}.modal-info .price{margin:0 0 14px;font-size:24px;color:var(--accent)}.desc{margin:12px 0 18px;color:var(--muted);font-size:13px;line-height:1.65}.details{border-top:1px solid var(--line);margin-bottom:22px}.detail-row{display:grid;grid-template-columns:78px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}.detail-row span{color:var(--muted)}.detail-row b{text-align:right}.modal-actions{display:grid;grid-template-columns:1fr;gap:9px}.btn{border:1px solid var(--ink);border-radius:16px;background:#fff;padding:12px 10px;font-size:14px;font-weight:760}.btn.primary{background:#171717;color:#fff;padding:13px 10px}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:80;display:none;border-radius:999px;background:#111;color:#fff;padding:12px 16px;font-size:14px}.toast.show{display:block}.lightbox{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.86);padding:8px}.lightbox.open{display:flex}.lightbox img{max-width:100vw;max-height:86vh;object-fit:contain;border-radius:10px;background:#fff}.lightbox-close{position:fixed;right:12px;top:12px;width:44px;height:44px;border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(255,255,255,.12);color:#fff;font-size:28px}.lightbox-arrow{position:fixed;top:50%;transform:translateY(-50%);width:42px;height:64px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.13);color:#fff;font-size:34px;display:grid;place-items:center}.lightbox-arrow.prev{left:10px}.lightbox-arrow.next{right:10px}.lightbox-tip{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);color:rgba(255,255,255,.72);font-size:13px;white-space:nowrap}
+    body.section-mode .searchbox{display:none}body.section-mode .home-btn{display:flex}.section-mode .resultbar{display:none!important}.section-grid{width:100%;max-width:100%;overflow-x:hidden}
+    @media(min-width:760px){.page{padding:24px 20px 86px}.searchbox{width:min(360px,34vw);padding:0 15px;justify-content:flex-start}.searchbox input{width:100%;opacity:1}.promo{font-size:13px}.catalog-sections{gap:42px}.collection-grid,.grid,.section-grid{grid-template-columns:repeat(3,1fr);gap:18px}.media{height:386px;aspect-ratio:auto}.body{padding:18px}.meta{font-size:12px;margin-bottom:14px}.title{font-size:22px;min-height:auto;margin-bottom:10px}.price{font-size:22px}.modal{padding:28px}.modal-panel{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:.95fr 1.05fr;min-height:720px;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.25)}.modal-media{padding:28px}.main-img-wrap{min-height:570px}.main-img-wrap img{max-height:570px}.modal-info{padding:44px 42px}.modal-info h3{font-size:42px}.details{margin-bottom:28px}.modal-actions{grid-template-columns:1fr 1fr 1fr}.lightbox{padding:24px}.lightbox img{max-width:96vw;max-height:90vh;border-radius:18px}}
   </style>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <section class="gate" id="gate" style="display:none"><div class="gate-card"><div class="mark" style="margin-bottom:16px">Eva</div><h1>球衣款式图册</h1><p>输入访问码浏览当前款式。</p><div class="gate-row"><input id="gateInput" placeholder="输入访问码" autocomplete="off" /><button id="gateBtn">进入</button></div><div class="gate-error" id="gateError"></div></div></section>
-  <main class="app" id="app"><div class="page"><header class="topbar"><div class="brand"><div class="mark">Eva</div><div><h1>球衣款式图册</h1><p>上新 / 常规 / 清仓款式预览</p></div></div><label class="searchbox top-search"><span>⌕</span><input id="searchInput" placeholder="搜索" /></label><button class="top-home-btn" id="topHomeBtn">返回首页</button><nav class="nav"><button class="nav-btn" id="homeBtn">首页</button><button class="nav-btn subtle" id="backBtn">返回上一层</button></nav></header>
-  <section class="hero"><div><p class="eyebrow">JERSEY CATALOG</p><h2>球衣款式图册</h2><p>浏览当前可选球衣款式，查看多角度图片、尺码、颜色与价格。看中后复制款式信息，再联系确认库存。</p></div></section>
-  <div class="promo-strip">多件优惠：任选 2 件 8 折，3 件 7 折；批发款式可详聊。</div><div class="resultbar" id="resultbar"></div><section class="grid" id="grid"></section></div></main>
-  <section class="modal" id="modal"><div class="modal-panel"><div class="modal-media"><div class="main-img-wrap" id="mainImgWrap"></div><div class="thumbs" id="thumbs"></div></div><div class="modal-info"><button class="close" id="closeBtn">×</button><button class="back-link" id="modalBackBtn">← 关闭详情</button><div class="code" id="modalCode"></div><h3 id="modalTitle"></h3><div class="price" id="modalPrice"></div><p class="desc" id="modalDesc"></p><div class="details" id="details"></div><div class="modal-actions"><button class="btn primary" id="copyConfirm">复制款式信息</button><button class="btn" id="copyCodeBtn">复制编号</button><button class="btn" id="continueBtn">继续浏览</button></div></div></div></section><section class="lightbox" id="lightbox" aria-label="图片放大查看"><button class="lightbox-close" id="lightboxClose">×</button><button class="lightbox-arrow prev" id="lightboxPrev" aria-label="上一张">‹</button><img id="lightboxImg" alt="放大图片"><button class="lightbox-arrow next" id="lightboxNext" aria-label="下一张">›</button><div class="lightbox-tip">点击空白处关闭 · 左右切换图片</div></section><div class="toast" id="toast">已复制</div>
+  <main class="app" id="app"><div class="page"><header class="topbar"><div class="brand"><div class="mark">Eva</div><div class="brand-text"><h1>球衣款式图册</h1><p>上新 / 常规 / 清仓款式预览</p></div></div><label class="searchbox"><span>⌕</span><input id="searchInput" placeholder="搜索" /></label><button class="home-btn" id="topHomeBtn">返回首页</button></header><div class="promo">多件优惠：任选 2 件 8 折，3 件 7 折；批发款式可详聊。</div><div class="resultbar" id="resultbar"></div><section class="grid" id="grid"></section></div></main>
+  <section class="modal" id="modal"><div class="modal-panel"><div class="modal-media"><div class="main-img-wrap" id="mainImgWrap"></div><div class="thumbs" id="thumbs"></div></div><div class="modal-info"><button class="close" id="closeBtn">×</button><button class="back-link" id="modalBackBtn">← 关闭详情</button><div class="code" id="modalCode"></div><h3 id="modalTitle"></h3><div class="price" id="modalPrice"></div><p class="desc" id="modalDesc"></p><div class="details" id="details"></div><div class="modal-actions"><button class="btn primary" id="copyConfirm">复制款式信息</button><button class="btn" id="copyCodeBtn">复制编号</button><button class="btn" id="continueBtn">继续浏览</button></div></div></div></section>
+  <section class="lightbox" id="lightbox"><button class="lightbox-close" id="lightboxClose">×</button><button class="lightbox-arrow prev" id="lightboxPrev">‹</button><img id="lightboxImg" alt="放大图片"><button class="lightbox-arrow next" id="lightboxNext">›</button><div class="lightbox-tip">点击空白处关闭 · 左右切换图片</div></section><div class="toast" id="toast">已复制</div>
   <script>
-    const ACCESS_CODE='friend';
-    let products=[];
-    const $=id=>document.getElementById(id); const gate=$('gate'),app=$('app');
-    if(gate) gate.style.display='none';
-    if(app) app.style.display='block';
-    const sectionMeta={
-      '新品上新':{subtitle:'本期新款集中展示，统一新款价。',badge:'新款 ¥189'},
-      '常规款式':{subtitle:'日常可选款式，适合快速浏览。',badge:'常规 ¥129'},
-      '清仓打折':{subtitle:'清仓款式集中展示，统一清仓价。',badge:'清仓 ¥99'}
-    };
+    let products=[];let currentSection=null;let currentProduct=null;let currentImages=[];let currentImageIndex=0;let suppressPop=false;
+    const $=id=>document.getElementById(id);
     const sectionOrder=['新品上新','常规款式','清仓打折'];
-    let categories=['全部']; let currentFilter='全部'; let currentProduct=null; let currentSection=null;
-
-    function normalizeImageValue(value){
-      if(!value)return '';
-      if(typeof value==='string')return value;
-      return value.image||value.src||value.url||'';
-    }
-    function normalizeProduct(p){
-      const imgs=(p.images||[]).map(normalizeImageValue).filter(Boolean);
-      const cover=normalizeImageValue(p.cover)||imgs[0]||'';
-      return {...p, cover, images:imgs.length?imgs:(cover?[cover]:[]), category:p.category||'短袖', section:p.section||'常规款式', price:p.price||'¥129', size:p.size||'S / M / XL / XXL', condition:p.condition||'聚酯纤维速干运动面料', imagePosition:p.imagePosition||'center center'};
-    }
-    const API_BASE='';
-    async function loadProducts(){
-      try{
-        const res=await fetch(API_BASE + '/api/products',{cache:'no-store'});
-        if(!res.ok)throw new Error('商品数据加载失败');
-        const data=await res.json();
-        products=(data.products||data||[]).map(normalizeProduct);
-        categories=['全部'];
-        renderFilters();
-        renderGrid();
-      }catch(err){
-        $('grid').innerHTML='<div class="notice">款式数据暂时加载失败，请稍后再试。</div>';
-      }
-    }
-    function renderFilters(){const box=$('filters'); if(!box)return; if(categories.length<=2){currentFilter='全部'; return;} box.style.display='flex'; box.innerHTML=categories.map(c=>`<button class="filter-btn ${c===currentFilter?'active':''}" data-filter="${c}">${c}</button>`).join('');document.querySelectorAll('.filter-btn').forEach(btn=>btn.onclick=()=>{currentFilter=btn.dataset.filter;currentSection=null;renderFilters();renderGrid();});}
-    function matches(p,q){const hay=[p.code,p.style,p.color,p.size,p.price,p.condition,p.category,p.section,p.note].join(' ').toLowerCase();return hay.includes(q.toLowerCase());}
-    function filteredProducts(){const q=$('searchInput').value.trim();return products.filter(p=>{const bySection=!currentSection||p.section===currentSection;const byFilter=currentFilter==='全部'||p.category===currentFilter;return bySection&&byFilter&&(!q||matches(p,q));});}
-    function syncViewMode(){const q=$('searchInput').value.trim();document.body.classList.toggle('section-mode',!!currentSection&&!q&&currentFilter==='全部');}
-    function updateResultbar(list){
-      syncViewMode();
-      const q=$('searchInput').value.trim();
-      const active=q||currentFilter!=='全部';
-      if(!active){$('resultbar').classList.remove('show');$('resultbar').innerHTML='';return;}
-      const parts=[]; if(q)parts.push(`搜索“${q}”`); if(currentFilter!=='全部')parts.push(`分类“${currentFilter}”`);
-      const label=parts.join(' · ');
-      $('resultbar').innerHTML=`<span>当前正在查看：${label} · 共 ${list.length} 款</span><button id="resetViewBtn">返回首页</button>`;
-      $('resultbar').classList.add('show');
-      $('resetViewBtn').onclick=goHome;
-    }
-    function productCard(p){return `<article class="card" onclick="openModal('${p.code}')"><div class="media" style="--pos:${p.imagePosition||'center center'}" role="button" aria-label="查看${p.style}详情">${p.cover?`<img loading="lazy" src="${p.cover}" alt="${p.style}">`:`<div class="placeholder">待上传真实图片</div>`}</div><div class="body"><div class="meta"><span>${p.code}</span></div><h3 class="title">${p.style}</h3><div class="price">${p.price}</div><div class="specs compact"><div class="spec"><b>尺码</b><span>${p.size}</span></div><div class="spec"><b>颜色</b><span>${p.color}</span></div></div><div class="actions"><button class="btn primary" onclick="event.stopPropagation();openModal('${p.code}')">查看详情</button><button class="btn" onclick="event.stopPropagation();copyCode('${p.code}')">复制编号</button></div></div></article>`;}
-    function collectionBlock(title,subtitle,badge,list){const previewCount=title==='新品上新'?4:6;const preview=list.slice(0,previewCount);const sectionClass=title==='新品上新'?'collection new-section':'collection';const moreText=`查看全部 ${list.length} 款`;return `<section class="${sectionClass}"><div class="collection-head"><div><h3>${title}</h3><p>${subtitle}</p></div><button class="section-link" onclick="openSection('${title}')">${moreText}</button></div><div class="collection-grid">${preview.map(productCard).join('')}</div><button class="section-more" onclick="openSection('${title}')">${moreText} →</button></section>`;}
-    function sectionPage(title,list){return `${list.map(productCard).join('')}`;}
-    function renderGrid(){const list=filteredProducts();updateResultbar(list);const q=$('searchInput').value.trim();const box=$('grid');if(!list.length){box.className='grid';box.innerHTML='<div class="notice">没有找到匹配款式。<br><button class="btn" style="margin-top:14px" onclick="goHome()">返回首页</button></div>';return;}if(currentSection&&!q&&currentFilter==='全部'){box.className='catalog-section-page';box.innerHTML=sectionPage(currentSection,list);return;}if(!q&&currentFilter==='全部'&&!currentSection){box.className='catalog-sections';box.innerHTML=sectionOrder.map(section=>{const sectionList=list.filter(p=>p.section===section);if(!sectionList.length)return '';const meta=sectionMeta[section]||{subtitle:'查看该分区款式。',badge:''};return collectionBlock(section,meta.subtitle,meta.badge,sectionList);}).join('');return;}box.className='grid';box.innerHTML=list.map(productCard).join('');}
-    function openSection(section){currentSection=section;$('searchInput').value='';currentFilter='全部';renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.openSection=openSection;
-    let currentImages=[];let currentImageIndex=0;
-    function setMainImage(src){
-      const imgHtml=src?`<img src="${src}" alt="商品图片">`:'<div class="placeholder">待上传真实图片</div>';
-      const arrows=currentImages.length>1?`<button class="gallery-arrow prev" id="prevImgBtn" aria-label="上一张">‹</button><button class="gallery-arrow next" id="nextImgBtn" aria-label="下一张">›</button>`:'';
-      $('mainImgWrap').innerHTML=imgHtml+arrows;
-      const mainImg=$('mainImgWrap').querySelector('img');
-      if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();openLightbox();};
-      const prev=$('prevImgBtn'),next=$('nextImgBtn');
-      if(prev)prev.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex-1);};
-      if(next)next.onclick=(e)=>{e.stopPropagation();switchImage(currentImageIndex+1);};
-    }
+    const sectionMeta={'新品上新':'本期新款集中展示','常规款式':'日常可选款式','清仓打折':'清仓款式集中展示'};
+    history.replaceState({view:'home'},'',location.href);
+    function normalizeImageValue(value){if(!value)return '';if(typeof value==='string')return value;return value.image||value.src||value.url||'';}
+    function normalizeProduct(p){const imgs=(p.images||[]).map(normalizeImageValue).filter(Boolean);const cover=normalizeImageValue(p.cover)||imgs[0]||'';return {...p,cover,images:imgs.length?imgs:(cover?[cover]:[]),category:p.category||'短袖',section:p.section||'常规款式',price:p.price||'¥129',size:p.size||'S / M / L / XL / 2XL / 3XL',condition:p.condition||p.material||'聚酯纤维速干运动面料',imagePosition:p.imagePosition||'center center'};}
+    async function loadProducts(){try{const res=await fetch('/api/products',{cache:'no-store'});if(!res.ok)throw new Error('load failed');const data=await res.json();products=(data.products||data||[]).map(normalizeProduct);renderGrid();}catch(e){$('grid').innerHTML='<div class="notice">款式数据暂时加载失败，请稍后再试。</div>';}}
+    function matches(p,q){return [p.code,p.style,p.color,p.size,p.price,p.condition,p.category,p.section,p.note].join(' ').toLowerCase().includes(q.toLowerCase());}
+    function filteredProducts(){const q=$('searchInput').value.trim();return products.filter(p=>(!currentSection||p.section===currentSection)&&(!q||matches(p,q)));}
+    function syncViewMode(){const q=$('searchInput').value.trim();document.body.classList.toggle('section-mode',!!currentSection&&!q);}
+    function updateResultbar(list){syncViewMode();const q=$('searchInput').value.trim();if(!q){$('resultbar').classList.remove('show');$('resultbar').innerHTML='';return;}$('resultbar').innerHTML=`<span>搜索“${q}” · 共 ${list.length} 款</span><button id="resetViewBtn">返回首页</button>`;$('resultbar').classList.add('show');$('resetViewBtn').onclick=()=>goHome(true);}
+    function productCard(p){return `<article class="card" onclick="openModal('${p.code}',true)"><div class="media" style="--pos:${p.imagePosition}">${p.cover?`<img loading="lazy" src="${p.cover}" alt="${p.style}">`:`<div class="placeholder">待上传图片</div>`}</div><div class="body"><div class="meta">${p.code}</div><h3 class="title">${p.style}</h3><div class="price">${p.price}</div></div></article>`;}
+    function collectionBlock(title,list){const preview=list.slice(0,title==='新品上新'?4:6);return `<section class="collection ${title==='新品上新'?'new-section':''}"><div class="collection-head"><h3>${title}</h3><button class="section-link" onclick="openSection('${title}',true)">查看更多</button></div><div class="collection-grid">${preview.map(productCard).join('')}</div></section>`;}
+    function renderGrid(){const list=filteredProducts();updateResultbar(list);const q=$('searchInput').value.trim();if(!list.length){$('grid').className='grid';$('grid').innerHTML='<div class="notice">没有找到匹配款式。</div>';return;}if(currentSection&&!q){$('grid').className='section-grid';$('grid').innerHTML=list.map(productCard).join('');return;}if(!q&&!currentSection){$('grid').className='catalog-sections';$('grid').innerHTML=sectionOrder.map(s=>{const arr=list.filter(p=>p.section===s);return arr.length?collectionBlock(s,arr):'';}).join('');return;}$('grid').className='grid';$('grid').innerHTML=list.map(productCard).join('');}
+    function openSection(section,push){currentSection=section;$('searchInput').value='';renderGrid();window.scrollTo({top:0,behavior:'smooth'});if(push)history.pushState({view:'section',section},'',`#section-${encodeURIComponent(section)}`);}window.openSection=openSection;
+    function goHome(push){currentSection=null;closeModal(false);closeLightbox(false);$('searchInput').value='';renderGrid();window.scrollTo({top:0,behavior:'smooth'});if(push)history.pushState({view:'home'},'',location.pathname+location.search);}window.goHome=goHome;
+    function setMainImage(src){const arrows=currentImages.length>1?`<button class="gallery-arrow prev" id="prevImgBtn">‹</button><button class="gallery-arrow next" id="nextImgBtn">›</button>`:'';$('mainImgWrap').innerHTML=(src?`<img src="${src}" alt="商品图片">`:'<div class="placeholder">待上传图片</div>')+arrows;const img=$('mainImgWrap').querySelector('img');if(img)img.onclick=e=>{e.stopPropagation();openLightbox();};const prev=$('prevImgBtn'),next=$('nextImgBtn');if(prev)prev.onclick=e=>{e.stopPropagation();switchImage(currentImageIndex-1);};if(next)next.onclick=e=>{e.stopPropagation();switchImage(currentImageIndex+1);};}
     function updateThumbs(){document.querySelectorAll('.thumb').forEach((b,i)=>b.classList.toggle('active',i===currentImageIndex));}
-    function switchImage(i){
-      if(!currentImages.length)return;
-      currentImageIndex=(i+currentImages.length)%currentImages.length;
-      setMainImage(currentImages[currentImageIndex]);
-      updateThumbs();
-    }
-    function openModal(code){
-      const p=products.find(x=>x.code===code);if(!p)return;currentProduct=p;
-      $('modalCode').textContent=p.code;$('modalTitle').textContent=p.style;$('modalPrice').textContent=p.price;$('modalDesc').textContent=p.note||'暂无备注';
-      const rows=[['价格',p.price],['尺码',p.size],['颜色',p.color],['分区',p.section||'常规款式'],['分类',p.category],['材质',p.condition]];
-      $('details').innerHTML=rows.map(r=>`<div class="detail-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
-      currentImages=p.images&&p.images.length?p.images:[p.cover];currentImageIndex=0;
-      setMainImage(currentImages[0]);
-      $('thumbs').innerHTML=currentImages.map((src,i)=>`<button class="thumb ${i===0?'active':''}" data-i="${i}"><img src="${src}" alt="图片${i+1}"></button>`).join('');
-      document.querySelectorAll('.thumb').forEach(btn=>btn.onclick=()=>switchImage(Number(btn.dataset.i)));
-      $('modal').classList.add('open');document.body.style.overflow='hidden';
-    } window.openModal=openModal;
-    function closeModal(){$('modal').classList.remove('open');closeLightbox(false);document.body.style.overflow='';}
-    $('closeBtn').onclick=closeModal;$('continueBtn').onclick=closeModal;$('modalBackBtn').onclick=closeModal;$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+    function switchImage(i){if(!currentImages.length)return;currentImageIndex=(i+currentImages.length)%currentImages.length;setMainImage(currentImages[currentImageIndex]);updateThumbs();}
+    function openModal(code,push){const p=products.find(x=>x.code===code);if(!p)return;currentProduct=p;$('modalCode').textContent=p.code;$('modalTitle').textContent=p.style;$('modalPrice').textContent=p.price;$('modalDesc').textContent=p.note||'暂无备注';const rows=[['价格',p.price],['尺码',p.size],['颜色',p.color],['分区',p.section],['材质',p.condition]];$('details').innerHTML=rows.map(r=>`<div class="detail-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');currentImages=p.images&&p.images.length?p.images:[p.cover];currentImageIndex=0;setMainImage(currentImages[0]);$('thumbs').innerHTML=currentImages.map((src,i)=>`<button class="thumb ${i===0?'active':''}" data-i="${i}"><img src="${src}" alt="图片${i+1}"></button>`).join('');document.querySelectorAll('.thumb').forEach(btn=>btn.onclick=()=>switchImage(Number(btn.dataset.i)));$('modal').classList.add('open');document.body.style.overflow='hidden';if(push)history.pushState({view:'modal',code,section:currentSection},'',`#product-${encodeURIComponent(code)}`);}window.openModal=openModal;
+    function closeModal(useBack=true){if(useBack&&$('modal').classList.contains('open')&&history.state&&history.state.view==='modal'){history.back();return;}$('modal').classList.remove('open');document.body.style.overflow='';}
     function openLightbox(){if(!currentImages.length)return;$('lightboxImg').src=currentImages[currentImageIndex];$('lightbox').classList.add('open');}
     function closeLightbox(clear=true){$('lightbox').classList.remove('open');if(clear)$('lightboxImg').removeAttribute('src');}
     function moveLightbox(delta){switchImage(currentImageIndex+delta);$('lightboxImg').src=currentImages[currentImageIndex];}
-    $('lightboxClose').onclick=()=>closeLightbox();$('lightboxPrev').onclick=(e)=>{e.stopPropagation();moveLightbox(-1);};$('lightboxNext').onclick=(e)=>{e.stopPropagation();moveLightbox(1);};$('lightbox').addEventListener('click',e=>{if(e.target.id==='lightbox')closeLightbox();});
-    document.addEventListener('keydown',e=>{if($('lightbox').classList.contains('open')){if(e.key==='ArrowLeft')moveLightbox(-1);if(e.key==='ArrowRight')moveLightbox(1);if(e.key==='Escape')closeLightbox();return;}if(!$('modal').classList.contains('open'))return;if(e.key==='ArrowLeft')switchImage(currentImageIndex-1);if(e.key==='ArrowRight')switchImage(currentImageIndex+1);if(e.key==='Escape')closeModal();});
-    function copyText(text){navigator.clipboard.writeText(text).then(()=>showToast('已复制'),()=>showToast('复制失败，请手动复制'));} function infoText(p,type='确认'){return `【${type}款式】
-编号：${p.code}
-款式：${p.style}
-颜色：${p.color}
-尺码：${p.size}
-价格：${p.price}
-材质：${p.condition}
-备注：${p.note||''}
-请联系店主确认库存。`;} function copyCode(code){copyText(code);} window.copyCode=copyCode; $('copyConfirm').onclick=()=>currentProduct&&copyText(infoText(currentProduct,'确认'));$('copyCodeBtn').onclick=()=>currentProduct&&copyText(currentProduct.code); function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
-    function goHome(){if($('modal').classList.contains('open'))closeModal();$('searchInput').value='';currentFilter='全部';currentSection=null;renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.goHome=goHome;
-    function goBackLayer(){if($('lightbox').classList.contains('open')){closeLightbox();return;}if($('modal').classList.contains('open')){closeModal();return;}const q=$('searchInput').value.trim();if(q||currentFilter!=='全部'||currentSection){goHome();return;}window.scrollTo({top:0,behavior:'smooth'});}
-    $('homeBtn').onclick=goHome;$('backBtn').onclick=goBackLayer;$('topHomeBtn').onclick=goHome;$('searchInput').addEventListener('input',()=>{currentSection=null;renderGrid();});loadProducts();
+    function copyText(text){navigator.clipboard.writeText(text).then(()=>showToast('已复制'),()=>showToast('复制失败，请手动复制'));}
+    function infoText(p,type='确认'){return `【${type}款式】\n编号：${p.code}\n款式：${p.style}\n颜色：${p.color}\n尺码：${p.size}\n价格：${p.price}\n材质：${p.condition}\n备注：${p.note||''}\n请联系店主确认库存。`;}
+    function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
+    window.addEventListener('popstate',e=>{const state=e.state||{view:'home'};closeLightbox(false);if(state.view==='home'){currentSection=null;$('modal').classList.remove('open');document.body.style.overflow='';$('searchInput').value='';renderGrid();window.scrollTo({top:0});return;}if(state.view==='section'){currentSection=state.section;$('modal').classList.remove('open');document.body.style.overflow='';$('searchInput').value='';renderGrid();window.scrollTo({top:0});return;}if(state.view==='modal'){currentSection=state.section||null;$('searchInput').value='';renderGrid();openModal(state.code,false);return;}});
+    $('searchInput').addEventListener('input',()=>{currentSection=null;renderGrid();});$('topHomeBtn').onclick=()=>goHome(true);$('closeBtn').onclick=()=>closeModal(true);$('continueBtn').onclick=()=>closeModal(true);$('modalBackBtn').onclick=()=>closeModal(true);$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal(true);});$('copyConfirm').onclick=()=>currentProduct&&copyText(infoText(currentProduct,'确认'));$('copyCodeBtn').onclick=()=>currentProduct&&copyText(currentProduct.code);$('lightboxClose').onclick=()=>closeLightbox();$('lightboxPrev').onclick=e=>{e.stopPropagation();moveLightbox(-1);};$('lightboxNext').onclick=e=>{e.stopPropagation();moveLightbox(1);};$('lightbox').addEventListener('click',e=>{if(e.target.id==='lightbox')closeLightbox();});document.addEventListener('keydown',e=>{if($('lightbox').classList.contains('open')){if(e.key==='ArrowLeft')moveLightbox(-1);if(e.key==='ArrowRight')moveLightbox(1);if(e.key==='Escape')closeLightbox();return;}if($('modal').classList.contains('open')){if(e.key==='ArrowLeft')switchImage(currentImageIndex-1);if(e.key==='ArrowRight')switchImage(currentImageIndex+1);if(e.key==='Escape')closeModal(true);}});
+    loadProducts();
   </script>
 </body>
 </html>
