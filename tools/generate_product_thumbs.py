@@ -3,8 +3,10 @@ from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 PRODUCT_DIR = ROOT / "images" / "products"
-MAX_SIDE = 800
-QUALITY = 82
+
+# 提升清晰度：首页缩略图更清晰，避免放大模糊
+MAX_SIDE = 1024
+QUALITY = 85
 
 
 def is_source_image(path: Path) -> bool:
@@ -37,6 +39,7 @@ def main() -> None:
     if not PRODUCT_DIR.exists():
         print("No product image directory found.")
         return
+
     count = 0
     for src in sorted(PRODUCT_DIR.glob("*.jp*g")):
         if not is_source_image(src):
@@ -46,6 +49,7 @@ def main() -> None:
             generate_thumb(src, dst)
             count += 1
             print("generated", dst.relative_to(ROOT))
+
     print("Generated/updated", count, "thumbnail(s).")
 
 
