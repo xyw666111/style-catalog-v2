@@ -128,7 +128,7 @@
       .details,.detail-row,.modal-actions{width:100%;max-width:100%;min-width:0;}
     }
 
-    /* V4.23: 分区页减法，只保留优惠提示和商品图册 */
+    /* V4.24: 首页搜索、分区返首、底部查看更多引导 */
     @media(max-width:620px){
       .page{padding:12px 7px 56px;}
       .topbar{padding:10px 0 10px;border-bottom:1px solid rgba(230,225,216,.78);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;}
@@ -139,7 +139,14 @@
       .mark{width:38px;height:32px;border-radius:999px;font-size:12px;border-color:#2a2927;}
       .brand h1{font-size:17px;letter-spacing:-.035em;}
       .brand p{font-size:11px;color:#8a847b;}
-      .top-home-btn{display:flex;align-items:center;justify-content:center;flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;height:34px;padding:0 12px;font-size:12px;font-weight:760;color:#2a2927;}
+      .top-search{display:flex;width:38px;height:34px;padding:0;justify-content:center;gap:6px;flex:none;border-radius:999px;background:#fff;transition:width .18s ease, padding .18s ease;box-shadow:none;}
+      .top-search span{font-size:15px;line-height:1;}
+      .top-search input{width:0;opacity:0;font-size:13px;transition:opacity .12s ease,width .18s ease;}
+      .top-search:focus-within{width:152px;padding:0 10px;justify-content:flex-start;}
+      .top-search:focus-within input{width:100%;opacity:1;}
+      .top-home-btn{display:none;align-items:center;justify-content:center;flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;height:34px;padding:0 12px;font-size:12px;font-weight:760;color:#2a2927;}
+      body.section-mode .top-search{display:none;}
+      body.section-mode .top-home-btn{display:flex;}
       .toolbar{display:none;}
       .hero{display:none;}
       .promo-strip{margin:9px 0 16px;padding:10px 12px;border-radius:14px;font-size:12.5px;line-height:1.5;background:#fff;border-color:#ece4da;}
@@ -150,7 +157,8 @@
       .collection-head h3{font-size:20px;letter-spacing:-.035em;display:flex;align-items:center;gap:7px;}
       .collection-head h3:before{content:"";width:4px;height:17px;border-radius:99px;background:#2a2927;display:block;}
       .collection-head p{display:none;}
-      .section-link{padding:6px 9px;font-size:12px;box-shadow:none;background:rgba(255,255,255,.85);}
+      .section-link{padding:7px 12px;font-size:12px;box-shadow:none;background:#171717;color:#fff;border-color:#171717;}
+      .section-more{margin-top:8px;display:flex;justify-content:center;align-items:center;width:100%;border:1px solid #171717;background:#171717;color:#fff;border-radius:999px;height:38px;font-size:13px;font-weight:780;letter-spacing:-.01em;}
       .grid,.collection-grid,.collection.new-section .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;}
       .catalog-section-page{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%;max-width:100%;overflow-x:hidden;}
       .card{border-radius:14px;border-color:#eee7dd;box-shadow:0 4px 12px rgba(35,32,28,.03);}
@@ -163,7 +171,7 @@
       .specs.compact,.collection.new-section .specs{display:none;}
       .actions,.card .actions,.collection.new-section .actions{display:none;}
       .section-page-head{display:none;}
-      .resultbar{display:none!important;}
+      body.section-mode .resultbar{display:none!important;}
       .modal-media{padding:12px 10px 10px;background:#f3efe7;}
       .main-img-wrap{border-radius:18px;border:1px solid #e5ded4;background:#fbfaf7;}
       .thumbs{gap:8px;padding:2px 0 0;}
@@ -187,7 +195,7 @@
 </head>
 <body>
   <section class="gate" id="gate" style="display:none"><div class="gate-card"><div class="mark" style="margin-bottom:16px">Eva</div><h1>球衣款式图册</h1><p>输入访问码浏览当前款式。</p><div class="gate-row"><input id="gateInput" placeholder="输入访问码" autocomplete="off" /><button id="gateBtn">进入</button></div><div class="gate-error" id="gateError"></div></div></section>
-  <main class="app" id="app"><div class="page"><header class="topbar"><div class="brand"><div class="mark">Eva</div><div><h1>球衣款式图册</h1><p>上新 / 常规 / 清仓款式预览</p></div></div><button class="top-home-btn" id="topHomeBtn">返回首页</button><input id="searchInput" type="hidden" value=""><nav class="nav"><button class="nav-btn" id="homeBtn">首页</button><button class="nav-btn subtle" id="backBtn">返回上一层</button></nav></header>
+  <main class="app" id="app"><div class="page"><header class="topbar"><div class="brand"><div class="mark">Eva</div><div><h1>球衣款式图册</h1><p>上新 / 常规 / 清仓款式预览</p></div></div><label class="searchbox top-search"><span>⌕</span><input id="searchInput" placeholder="搜索" /></label><button class="top-home-btn" id="topHomeBtn">返回首页</button><nav class="nav"><button class="nav-btn" id="homeBtn">首页</button><button class="nav-btn subtle" id="backBtn">返回上一层</button></nav></header>
   <section class="hero"><div><p class="eyebrow">JERSEY CATALOG</p><h2>球衣款式图册</h2><p>浏览当前可选球衣款式，查看多角度图片、尺码、颜色与价格。看中后复制款式信息，再联系确认库存。</p></div></section>
   <div class="promo-strip">多件优惠：任选 2 件 8 折，3 件 7 折；批发款式可详聊。</div><div class="resultbar" id="resultbar"></div><section class="grid" id="grid"></section></div></main>
   <section class="modal" id="modal"><div class="modal-panel"><div class="modal-media"><div class="main-img-wrap" id="mainImgWrap"></div><div class="thumbs" id="thumbs"></div></div><div class="modal-info"><button class="close" id="closeBtn">×</button><button class="back-link" id="modalBackBtn">← 关闭详情</button><div class="code" id="modalCode"></div><h3 id="modalTitle"></h3><div class="price" id="modalPrice"></div><p class="desc" id="modalDesc"></p><div class="details" id="details"></div><div class="modal-actions"><button class="btn primary" id="copyConfirm">复制款式信息</button><button class="btn" id="copyCodeBtn">复制编号</button><button class="btn" id="continueBtn">继续浏览</button></div></div></div></section><section class="lightbox" id="lightbox" aria-label="图片放大查看"><button class="lightbox-close" id="lightboxClose">×</button><button class="lightbox-arrow prev" id="lightboxPrev" aria-label="上一张">‹</button><img id="lightboxImg" alt="放大图片"><button class="lightbox-arrow next" id="lightboxNext" aria-label="下一张">›</button><div class="lightbox-tip">点击空白处关闭 · 左右切换图片</div></section><div class="toast" id="toast">已复制</div>
@@ -232,7 +240,9 @@
     function renderFilters(){const box=$('filters'); if(!box)return; if(categories.length<=2){currentFilter='全部'; return;} box.style.display='flex'; box.innerHTML=categories.map(c=>`<button class="filter-btn ${c===currentFilter?'active':''}" data-filter="${c}">${c}</button>`).join('');document.querySelectorAll('.filter-btn').forEach(btn=>btn.onclick=()=>{currentFilter=btn.dataset.filter;currentSection=null;renderFilters();renderGrid();});}
     function matches(p,q){const hay=[p.code,p.style,p.color,p.size,p.price,p.condition,p.category,p.section,p.note].join(' ').toLowerCase();return hay.includes(q.toLowerCase());}
     function filteredProducts(){const q=$('searchInput').value.trim();return products.filter(p=>{const bySection=!currentSection||p.section===currentSection;const byFilter=currentFilter==='全部'||p.category===currentFilter;return bySection&&byFilter&&(!q||matches(p,q));});}
+    function syncViewMode(){const q=$('searchInput').value.trim();document.body.classList.toggle('section-mode',!!currentSection&&!q&&currentFilter==='全部');}
     function updateResultbar(list){
+      syncViewMode();
       const q=$('searchInput').value.trim();
       const active=q||currentFilter!=='全部';
       if(!active){$('resultbar').classList.remove('show');$('resultbar').innerHTML='';return;}
@@ -243,7 +253,7 @@
       $('resetViewBtn').onclick=goHome;
     }
     function productCard(p){return `<article class="card" onclick="openModal('${p.code}')"><div class="media" style="--pos:${p.imagePosition||'center center'}" role="button" aria-label="查看${p.style}详情">${p.cover?`<img loading="lazy" src="${p.cover}" alt="${p.style}">`:`<div class="placeholder">待上传真实图片</div>`}</div><div class="body"><div class="meta"><span>${p.code}</span></div><h3 class="title">${p.style}</h3><div class="price">${p.price}</div><div class="specs compact"><div class="spec"><b>尺码</b><span>${p.size}</span></div><div class="spec"><b>颜色</b><span>${p.color}</span></div></div><div class="actions"><button class="btn primary" onclick="event.stopPropagation();openModal('${p.code}')">查看详情</button><button class="btn" onclick="event.stopPropagation();copyCode('${p.code}')">复制编号</button></div></div></article>`;}
-    function collectionBlock(title,subtitle,badge,list){const previewCount=title==='新品上新'?4:6;const preview=list.slice(0,previewCount);const sectionClass=title==='新品上新'?'collection new-section':'collection';return `<section class="${sectionClass}"><div class="collection-head"><div><h3>${title}</h3><p>${subtitle}</p></div><button class="section-link" onclick="openSection('${title}')">查看更多</button></div><div class="collection-grid">${preview.map(productCard).join('')}</div></section>`;}
+    function collectionBlock(title,subtitle,badge,list){const previewCount=title==='新品上新'?4:6;const preview=list.slice(0,previewCount);const sectionClass=title==='新品上新'?'collection new-section':'collection';const moreText=`查看全部 ${list.length} 款`;return `<section class="${sectionClass}"><div class="collection-head"><div><h3>${title}</h3><p>${subtitle}</p></div><button class="section-link" onclick="openSection('${title}')">${moreText}</button></div><div class="collection-grid">${preview.map(productCard).join('')}</div><button class="section-more" onclick="openSection('${title}')">${moreText} →</button></section>`;}
     function sectionPage(title,list){return `${list.map(productCard).join('')}`;}
     function renderGrid(){const list=filteredProducts();updateResultbar(list);const q=$('searchInput').value.trim();const box=$('grid');if(!list.length){box.className='grid';box.innerHTML='<div class="notice">没有找到匹配款式。<br><button class="btn" style="margin-top:14px" onclick="goHome()">返回首页</button></div>';return;}if(currentSection&&!q&&currentFilter==='全部'){box.className='catalog-section-page';box.innerHTML=sectionPage(currentSection,list);return;}if(!q&&currentFilter==='全部'&&!currentSection){box.className='catalog-sections';box.innerHTML=sectionOrder.map(section=>{const sectionList=list.filter(p=>p.section===section);if(!sectionList.length)return '';const meta=sectionMeta[section]||{subtitle:'查看该分区款式。',badge:''};return collectionBlock(section,meta.subtitle,meta.badge,sectionList);}).join('');return;}box.className='grid';box.innerHTML=list.map(productCard).join('');}
     function openSection(section){currentSection=section;$('searchInput').value='';currentFilter='全部';renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.openSection=openSection;
@@ -294,7 +304,7 @@
 请联系店主确认库存。`;} function copyCode(code){copyText(code);} window.copyCode=copyCode; $('copyConfirm').onclick=()=>currentProduct&&copyText(infoText(currentProduct,'确认'));$('copyCodeBtn').onclick=()=>currentProduct&&copyText(currentProduct.code); function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
     function goHome(){if($('modal').classList.contains('open'))closeModal();$('searchInput').value='';currentFilter='全部';currentSection=null;renderFilters();renderGrid();window.scrollTo({top:0,behavior:'smooth'});} window.goHome=goHome;
     function goBackLayer(){if($('lightbox').classList.contains('open')){closeLightbox();return;}if($('modal').classList.contains('open')){closeModal();return;}const q=$('searchInput').value.trim();if(q||currentFilter!=='全部'||currentSection){goHome();return;}window.scrollTo({top:0,behavior:'smooth'});}
-    $('homeBtn').onclick=goHome;$('backBtn').onclick=goBackLayer;$('topHomeBtn').onclick=goHome;loadProducts();
+    $('homeBtn').onclick=goHome;$('backBtn').onclick=goBackLayer;$('topHomeBtn').onclick=goHome;$('searchInput').addEventListener('input',()=>{currentSection=null;renderGrid();});loadProducts();
   </script>
 </body>
 </html>
