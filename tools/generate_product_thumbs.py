@@ -3,8 +3,8 @@ from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 PRODUCT_DIR = ROOT / "images" / "products"
-MAX_SIDE = 360
-QUALITY = 72
+MAX_SIDE = 800
+QUALITY = 82
 
 
 def is_source_image(path: Path) -> bool:
@@ -17,7 +17,12 @@ def thumb_path(path: Path) -> Path:
 
 
 def should_regenerate(src: Path, dst: Path) -> bool:
-    return not dst.exists() or src.stat().st_mtime > dst.stat().st_mtime
+    if not dst.exists():
+        return True
+    if src.stat().st_mtime > dst.stat().st_mtime:
+        return True
+    with Image.open(dst) as im:
+        return max(im.size) < MAX_SIDE
 
 
 def generate_thumb(src: Path, dst: Path) -> None:
@@ -32,7 +37,6 @@ def main() -> None:
     if not PRODUCT_DIR.exists():
         print("No product image directory found.")
         return
-
     count = 0
     for src in sorted(PRODUCT_DIR.glob("*.jp*g")):
         if not is_source_image(src):
@@ -41,9 +45,8 @@ def main() -> None:
         if should_regenerate(src, dst):
             generate_thumb(src, dst)
             count += 1
-            print(f"generated {dst.relative_to(ROOT)}")
-
-    print(f"Generated/updated {count} thumbnail(s).")
+            print("generated", dst.relative_to(ROOT))
+    print("Generated/updated", count, "thumbnail(s).")
 
 
 if __name__ == "__main__":
