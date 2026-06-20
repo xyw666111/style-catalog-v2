@@ -1,0 +1,45 @@
+name: Generate product thumbnails
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'images/products/**.jpg'
+      - 'images/products/**.jpeg'
+      - 'tools/generate_product_thumbs.py'
+      - '.github/workflows/generate-product-thumbs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-thumbs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pillow
+        run: python -m pip install --upgrade pillow
+
+      - name: Generate thumbnails
+        run: python tools/generate_product_thumbs.py
+
+      - name: Commit thumbnails
+        run: |
+          if [ -z "$(git status --porcelain images/products)" ]; then
+            echo "No thumbnail changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/products/*-thumb.jpg
+          git commit -m "Generate product thumbnails"
+          git push
