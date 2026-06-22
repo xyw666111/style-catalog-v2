@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'images/products/**/*.jpg'
+      - 'index.html'
       - '.github/workflows/backfill-product-images.yml'
   workflow_dispatch:
 
@@ -20,6 +21,21 @@ jobs:
         with:
           python-version: '3.11'
       - run: python -m pip install --upgrade pillow
+      - name: Patch front detail clarity strategy
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace("const ASSET_VER='gallery-only-v3-0622';", "const ASSET_VER='clarity-v5-0622';")
+          old = "function setMainImage(item){const display=item&&item.medium?withVer(item.medium):'';const arrows=currentGallery.length>1?`<button class=\"gallery-arrow prev\" id=\"prevImgBtn\">‹</button><button class=\"gallery-arrow next\" id=\"nextImgBtn\">›</button>`:'';$('mainImgWrap').innerHTML=(display?`<img src=\"${escAttr(display)}\" alt=\"商品图片\" decoding=\"async\" fetchpriority=\"high\">`:'<div class=\"placeholder\">待上传图片</div>')+arrows;const img=$('mainImgWrap').querySelector('img');if(img)img.onclick=e=>{e.stopPropagation();openLightbox()};const prevBtn=$('prevImgBtn'),nextBtn=$('nextImgBtn');if(prevBtn)prevBtn.onclick=e=>{e.stopPropagation();switchImage(currentImageIndex-1)};if(nextBtn)nextBtn.onclick=e=>{e.stopPropagation();switchImage(currentImageIndex+1)}}"
+          new = "function setMainImage(item){const display=item&&item.medium?withVer(item.medium):'';const original=item&&item.original?withVer(item.original):'';const srcset=display&&original&&display!==original?`${display} 1x, ${original} 2x`:'';const arrows=currentGallery.length>1?`<button class=\"gallery-arrow prev\" id=\"prevImgBtn\">‹</button><button class=\"gallery-arrow next\" id=\"nextImgBtn\">›</button>`:'';$('mainImgWrap').innerHTML=(display?`<img src=\"${escAttr(display)}\" ${srcset?`srcset=\"${escAttr(srcset)}\"`:''} sizes=\"(max-width:760px) 100vw, 52vw\" alt=\"商品图片\" decoding=\"async\" fetchpriority=\"high\">`:'<div class=\"placeholder\">待上传图片</div>')+arrows;const img=$('mainImgWrap').querySelector('img');if(img)img.onclick=e=>{e.stopPropagation();openLightbox()};const prevBtn=$('prevImgBtn'),nextBtn=$('nextImgBtn');if(prevBtn)prevBtn.onclick=e=>{e.stopPropagation();switchImage(currentImageIndex-1)};if(nextBtn)nextBtn.onclick=e=>{e.stopPropagation();switchImage(currentImageIndex+1)};preloadNearbyImages()}"
+          text = text.replace(old, new)
+          old2 = "function switchImage(i){if(!currentGallery.length)return;currentImageIndex=(i+currentGallery.length)%currentGallery.length;setMainImage(currentGallery[currentImageIndex]);updateThumbs()}"
+          new2 = "function preloadNearbyImages(){if(!currentGallery.length)return;[-1,1].forEach(d=>{const g=currentGallery[(currentImageIndex+d+currentGallery.length)%currentGallery.length];if(g&&g.medium){const img=new Image();img.decoding='async';img.src=withVer(g.medium)}})}\n    function switchImage(i){if(!currentGallery.length)return;currentImageIndex=(i+currentGallery.length)%currentGallery.length;setMainImage(currentGallery[currentImageIndex]);updateThumbs()}"
+          text = text.replace(old2, new2)
+          path.write_text(text, encoding='utf-8')
+          PY
       - name: Generate higher clarity thumb and medium files
         run: |
           python - <<'PY'
@@ -52,14 +68,14 @@ jobs:
               changed += 2
           print(f'Regenerated {changed} higher clarity product image variants')
           PY
-      - name: Commit generated variants
+      - name: Commit generated clarity assets
         run: |
-          if [ -n "$(git status --porcelain images/products)" ]; then
+          if [ -n "$(git status --porcelain index.html images/products)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add images/products
-            git commit -m "Regenerate higher clarity product image variants"
+            git add index.html images/products
+            git commit -m "Apply higher clarity front and product images"
             git push
           else
-            echo "No image variant changes."
+            echo "No clarity asset changes."
           fi
