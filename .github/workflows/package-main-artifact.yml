@@ -1,0 +1,26 @@
+name: Package main artifact
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/package-main-artifact.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build repository zip
+        run: |
+          rm -rf /tmp/style-catalog-v2-latest
+          mkdir -p /tmp/style-catalog-v2-latest
+          rsync -a --exclude='.git' ./ /tmp/style-catalog-v2-latest/
+          cd /tmp
+          zip -r style-catalog-v2-latest.zip style-catalog-v2-latest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: style-catalog-v2-latest
+          path: /tmp/style-catalog-v2-latest.zip
+          retention-days: 7
