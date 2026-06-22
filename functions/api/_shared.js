@@ -14,6 +14,8 @@ export function requireAdmin(request, env) {
   return Boolean(key && key === env.ADMIN_KEY);
 }
 
+const GALLERY_VERSION = "clarity-v4-0622";
+
 function asArray(value) {
   if (Array.isArray(value)) return value;
   if (typeof value !== "string") return [];
@@ -51,6 +53,20 @@ function toMedium(src) {
 
 function keyOf(src) {
   return stripVariant(src).split("?")[0];
+}
+
+function versionUrl(src) {
+  src = cleanUrl(src);
+  if (!src || /^data:|^blob:/i.test(src)) return src;
+  return src + (src.includes("?") ? "&" : "?") + "cv=" + GALLERY_VERSION;
+}
+
+function versionGallery(gallery) {
+  return gallery.map(item => ({
+    thumb: versionUrl(item.thumb),
+    medium: versionUrl(item.medium),
+    original: versionUrl(item.original)
+  }));
 }
 
 function addGalleryItem(map, item, preferredType = "") {
@@ -122,7 +138,7 @@ export function normalizeProduct(product, index = 0) {
 export function publicProduct(item) {
   let stored = [];
   try { stored = item.images ? JSON.parse(item.images) : []; } catch (e) { stored = []; }
-  const gallery = buildGallery({ ...item, gallery: stored, images: stored });
+  const gallery = versionGallery(buildGallery({ ...item, gallery: stored, images: stored }));
   return {
     id: item.id,
     code: item.code || "",
