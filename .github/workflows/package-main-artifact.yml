@@ -1,4 +1,4 @@
-name: Package main artifact
+name: Package main repository zip
 
 on:
   push:
@@ -7,6 +7,9 @@ on:
       - '.github/workflows/package-main-artifact.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   package:
     runs-on: ubuntu-latest
@@ -14,13 +17,26 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build repository zip
         run: |
+          rm -f STYLE_CATALOG_V2_LATEST_REPO.zip
           rm -rf /tmp/style-catalog-v2-latest
           mkdir -p /tmp/style-catalog-v2-latest
-          rsync -a --exclude='.git' ./ /tmp/style-catalog-v2-latest/
+          rsync -a --exclude='.git' --exclude='STYLE_CATALOG_V2_LATEST_REPO.zip' ./ /tmp/style-catalog-v2-latest/
           cd /tmp
           zip -r style-catalog-v2-latest.zip style-catalog-v2-latest
+          mv /tmp/style-catalog-v2-latest.zip "$GITHUB_WORKSPACE/STYLE_CATALOG_V2_LATEST_REPO.zip"
+      - name: Commit repository zip
+        run: |
+          if [ -n "$(git status --porcelain STYLE_CATALOG_V2_LATEST_REPO.zip)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add STYLE_CATALOG_V2_LATEST_REPO.zip
+            git commit -m "Update latest repository zip package"
+            git push
+          else
+            echo "Repository zip is unchanged."
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: style-catalog-v2-latest
-          path: /tmp/style-catalog-v2-latest.zip
+          path: STYLE_CATALOG_V2_LATEST_REPO.zip
           retention-days: 7
