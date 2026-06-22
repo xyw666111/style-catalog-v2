@@ -28,10 +28,10 @@ function asArray(value) {
 function cleanUrl(value) {
   if (!value) return "";
   if (typeof value === "string") return value.trim();
-  return String(value.original || value.image || value.src || value.url || value.medium || value.thumb || "").trim();
+  return String(value.original || value.medium || value.thumb || value.image || value.src || value.url || "").trim();
 }
 
-function toOriginalUrl(src) {
+function stripVariant(src) {
   src = cleanUrl(src);
   if (!src) return "";
   return src
@@ -39,19 +39,25 @@ function toOriginalUrl(src) {
     .replace(/-medium\.jpe?g($|[?#])/i, ".jpg$1");
 }
 
-function toThumbUrl(src) {
-  const original = toOriginalUrl(src);
+function toThumb(src) {
+  const original = stripVariant(src);
   return original ? original.replace(/\.jpe?g($|[?#])/i, "-thumb.jpg$1") : "";
 }
 
-function keyOf(src) {
-  return toOriginalUrl(src).split("?")[0];
+function toMedium(src) {
+  const original = stripVariant(src);
+  return original ? original.replace(/\.jpe?g($|[?#])/i, "-medium.jpg$1") : "";
 }
 
-function addToMap(map, item, preferredType = "") {
+function keyOf(src) {
+  return stripVariant(src).split("?")[0];
+}
+
+function addGalleryItem(map, item, preferredType = "") {
   if (!item) return;
+
   if (typeof item === "object" && !Array.isArray(item)) {
-    const base = toOriginalUrl(item.original || item.image || item.src || item.url || item.medium || item.thumb);
+    const base = stripVariant(item.original || item.image || item.src || item.url || item.medium || item.thumb);
     if (!base) return;
     const key = keyOf(base);
     const current = map.get(key) || { thumb: "", medium: "", original: base };
@@ -61,8 +67,9 @@ function addToMap(map, item, preferredType = "") {
     map.set(key, current);
     return;
   }
+
   const src = cleanUrl(item);
-  const base = toOriginalUrl(src);
+  const base = stripVariant(src);
   if (!base) return;
   const key = keyOf(base);
   const current = map.get(key) || { thumb: "", medium: "", original: base };
@@ -74,22 +81,21 @@ function addToMap(map, item, preferredType = "") {
 
 export function buildGallery(product = {}) {
   const map = new Map();
-  asArray(product.gallery).forEach(item => addToMap(map, item));
-  asArray(product.images).forEach(item => addToMap(map, item));
-  asArray(product.thumbs).forEach(item => addToMap(map, item, "thumb"));
-  addToMap(map, product.cover);
-  addToMap(map, product.cover_medium || product.coverMedium, "medium");
-  addToMap(map, product.cover_thumb || product.coverThumb || product.thumb, "thumb");
+  asArray(product.gallery).forEach(item => addGalleryItem(map, item));
+  asArray(product.images).forEach(item => addGalleryItem(map, item));
+  asArray(product.thumbs).forEach(item => addGalleryItem(map, item, "thumb"));
+  addGalleryItem(map, product.cover);
+  addGalleryItem(map, product.cover_medium || product.coverMedium, "medium");
+  addGalleryItem(map, product.cover_thumb || product.coverThumb || product.thumb, "thumb");
+
   return [...map.values()]
     .map(item => {
-      const original = item.original || toOriginalUrl(item.medium || item.thumb);
-      return {
-        thumb: item.thumb || toThumbUrl(original),
-        medium: item.medium || original,
-        original
-      };
+      const original = item.original || stripVariant(item.medium || item.thumb);
+      const medium = item.medium || toMedium(original);
+      const thumb = item.thumb || toThumb(original);
+      return { thumb, medium, original };
     })
-    .filter(item => item.original || item.medium || item.thumb)
+    .filter(item => item.thumb && item.medium && item.original)
     .slice(0, 9);
 }
 
@@ -114,17 +120,23 @@ export function normalizeProduct(product, index = 0) {
 }
 
 export function publicProduct(item) {
-  let imageItems = [];
-  try { imageItems = item.images ? JSON.parse(item.images) : []; } catch (e) { imageItems = []; }
-  const gallery = buildGallery({ ...item, images: imageItems });
-  const cover = gallery[0] || { thumb: "", medium: "", original: "" };
+  let stored = [];
+  try { stored = item.images ? JSON.parse(item.images) : []; } catch (e) { stored = []; }
+  const gallery = buildGallery({ ...item, gallery: stored, images: stored });
   return {
-    ...item,
-    images: gallery.map(g => g.original).filter(Boolean),
-    gallery,
-    cover: cover.original,
-    cover_medium: cover.medium,
-    cover_thumb: cover.thumb
+    id: item.id,
+    code: item.code || "",
+    style: item.style || "未命名款式",
+    section: item.section || "常规款式",
+    price: item.price || "¥129",
+    color: item.color || "",
+    size: item.size || "S / M / L / XL / 2XL / 3XL",
+    material: item.material || "聚酯纤维速干运动面料",
+    note: item.note || "",
+    sort_order: item.sort_order,
+    created_at: item.created_at,
+    updated_at: item.updated_at,
+    gallery
   };
 }
 
