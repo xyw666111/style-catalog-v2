@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.11'
       - run: python -m pip install --upgrade pillow
-      - name: Generate sharper thumb and medium files
+      - name: Generate higher clarity thumb and medium files
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -47,10 +47,10 @@ jobs:
               stem = src.with_suffix('')
               thumb = stem.with_name(stem.name + '-thumb').with_suffix('.jpg')
               medium = stem.with_name(stem.name + '-medium').with_suffix('.jpg')
-              save_variant(src, thumb, 640, 82)
-              save_variant(src, medium, 1600, 88)
+              save_variant(src, thumb, 720, 84)
+              save_variant(src, medium, 2000, 92)
               changed += 2
-          print(f'Regenerated {changed} sharper product image variants')
+          print(f'Regenerated {changed} higher clarity product image variants')
           PY
       - name: Commit generated variants
         run: |
@@ -58,7 +58,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add images/products
-            git commit -m "Regenerate sharper product thumb and medium images"
+            git commit -m "Regenerate higher clarity product image variants"
             git push
           else
             echo "No image variant changes."
