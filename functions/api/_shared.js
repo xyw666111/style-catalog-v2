@@ -14,7 +14,7 @@ export function requireAdmin(request, env) {
   return Boolean(key && key === env.ADMIN_KEY);
 }
 
-const GALLERY_VERSION = "clarity-v4-0622";
+const GALLERY_VERSION = "clarity-v5-0622";
 
 function asArray(value) {
   if (Array.isArray(value)) return value;
