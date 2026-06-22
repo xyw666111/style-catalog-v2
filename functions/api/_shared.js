@@ -39,11 +39,6 @@ function toOriginalUrl(src) {
     .replace(/-medium\.jpe?g($|[?#])/i, ".jpg$1");
 }
 
-function toMediumUrl(src) {
-  const original = toOriginalUrl(src);
-  return original ? original.replace(/\.jpe?g($|[?#])/i, "-medium.jpg$1") : "";
-}
-
 function toThumbUrl(src) {
   const original = toOriginalUrl(src);
   return original ? original.replace(/\.jpe?g($|[?#])/i, "-thumb.jpg$1") : "";
@@ -60,8 +55,8 @@ function addToMap(map, item, preferredType = "") {
     if (!base) return;
     const key = keyOf(base);
     const current = map.get(key) || { thumb: "", medium: "", original: base };
-    current.thumb = cleanUrl(item.thumb || item.thumbnail || item.cover_thumb || item.coverThumb) || current.thumb || toThumbUrl(base);
-    current.medium = cleanUrl(item.medium || item.preview || item.detail) || current.medium || toMediumUrl(base);
+    current.thumb = cleanUrl(item.thumb || item.thumbnail || item.cover_thumb || item.coverThumb) || current.thumb;
+    current.medium = cleanUrl(item.medium || item.preview || item.detail) || current.medium;
     current.original = cleanUrl(item.original || item.image || item.src || item.url) || current.original || base;
     map.set(key, current);
     return;
@@ -90,7 +85,7 @@ export function buildGallery(product = {}) {
       const original = item.original || toOriginalUrl(item.medium || item.thumb);
       return {
         thumb: item.thumb || toThumbUrl(original),
-        medium: item.medium || toMediumUrl(original),
+        medium: item.medium || original,
         original
       };
     })
@@ -101,7 +96,6 @@ export function buildGallery(product = {}) {
 export function normalizeProduct(product, index = 0) {
   const now = new Date().toISOString();
   const gallery = buildGallery(product);
-  const originals = gallery.map(item => item.original).filter(Boolean);
   return {
     id: product.id || product.code || crypto.randomUUID(),
     code: product.code || "",
@@ -112,7 +106,7 @@ export function normalizeProduct(product, index = 0) {
     size: product.size || "S / M / L / XL / 2XL / 3XL",
     material: product.material || product.condition || "聚酯纤维速干运动面料",
     note: product.note || "",
-    images: JSON.stringify(originals),
+    images: JSON.stringify(gallery),
     sort_order: Number.isFinite(Number(product.sort_order)) ? Number(product.sort_order) : index + 1,
     created_at: product.created_at || now,
     updated_at: now
