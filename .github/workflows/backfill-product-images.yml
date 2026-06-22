@@ -1,0 +1,68 @@
+name: Backfill product image variants
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'images/products/**/*.jpg'
+      - '.github/workflows/backfill-product-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --upgrade pillow
+      - name: Generate missing thumb and medium files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps
+
+          root = Path('images/products')
+          if not root.exists():
+              raise SystemExit(0)
+
+          originals = [p for p in root.rglob('*.jpg') if not p.name.lower().endswith(('-thumb.jpg', '-medium.jpg'))]
+
+          def save_variant(src: Path, dst: Path, max_side: int, quality: int):
+              with Image.open(src) as im:
+                  im = ImageOps.exif_transpose(im).convert('RGB')
+                  scale = min(1.0, max_side / max(im.size))
+                  size = (max(1, round(im.width * scale)), max(1, round(im.height * scale)))
+                  if size != im.size:
+                      im = im.resize(size, Image.Resampling.LANCZOS)
+                  dst.parent.mkdir(parents=True, exist_ok=True)
+                  im.save(dst, 'JPEG', quality=quality, optimize=True, progressive=True)
+
+          changed = 0
+          for src in originals:
+              stem = src.with_suffix('')
+              thumb = stem.with_name(stem.name + '-thumb').with_suffix('.jpg')
+              medium = stem.with_name(stem.name + '-medium').with_suffix('.jpg')
+              if not thumb.exists():
+                  save_variant(src, thumb, 520, 68)
+                  changed += 1
+              if not medium.exists():
+                  save_variant(src, medium, 1000, 76)
+                  changed += 1
+          print(f'Generated {changed} missing product image variants')
+          PY
+      - name: Commit generated variants
+        run: |
+          if [ -n "$(git status --porcelain images/products)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add images/products
+            git commit -m "Backfill product thumb and medium images"
+            git push
+          else
+            echo "No missing image variants."
+          fi
